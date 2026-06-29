@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demandes de Progression | EJP Chef</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+                .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'slide-out-right': 'slideOutRight 0.5s ease-in forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { transform: 'translateY(15px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideOutRight: {
+                            '0%': { transform: 'translateX(0)', opacity: '1' },
+                            '100%': { transform: 'translateX(100%)', opacity: '0' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .sidebar-link.active { background-color: rgba(17, 94, 89, 0.1); color: #115E59; border-right: 4px solid #115E59; }
+        .sidebar-link:not(.active):hover { background-color: rgba(0, 0, 0, 0.02); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        /* Cards with green border */
+        .request-card { transition: all 0.3s ease; border: 1px solid #115E59; }
+        .request-card:hover { transform: translateY(-3px); border-color: #27AE60; box-shadow: 0 12px 30px -10px rgba(17,94,89,0.25); }
+
+        /* Fix amber mini-card (warning) in dark mode */
+        .dark .stat-warning { background-color: rgba(245, 166, 35, 0.12) !important; border-color: rgba(245, 166, 35, 0.35) !important; }
+        .dark .stat-warning .stat-label { color: #9CA3AF !important; }
+        .dark .stat-warning .stat-value { color: #F9FAFB !important; }
+        .dark .stat-warning .stat-sub { color: #9CA3AF !important; }
+
+        /* Fix transition badge in dark mode */
+        .dark .level-badge { background-color: rgba(255,255,255,0.07) !important; border-color: rgba(255,255,255,0.15) !important; }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+        
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-bg font-sans text-text overflow-hidden">
+    
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar Chef -->
+        <aside class="w-[280px] bg-surface border-r border-border flex flex-col h-full z-50 shrink-0">
+            <div class="p-8 flex items-center gap-4">
+                <div class="w-12 h-12 bg-chef rounded-xl flex items-center justify-center border border-white shadow-md">
+                    <span class="text-white font-serif font-bold text-xl">EJP</span>
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-lg leading-tight text-primary">Portail Chef</h1>
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-chef">Responsable Famille</p>
+                </div>
+            </div>
+            
+            <div class="px-8 pb-4">
+                <div class="flex items-center gap-3 bg-surface p-3 rounded-xl border border-border">
+                    <div class="w-10 h-10 rounded-full bg-primary text-primary-text flex items-center justify-center font-bold text-sm">AM</div>
+                    <div>
+                        <p class="font-bold text-sm text-primary">Chef Amos</p>
+                        <p class="text-xs text-muted">Famille Béthanie</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+                <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-chart-pie w-5"></i><span class="font-medium">Vue d'ensemble</span>
+                </a>
+                <a href="membres.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-users w-5"></i><span class="font-medium">Ma Famille</span>
+                </a>
+                <a href="demandes.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                    <i class="fas fa-file-signature w-5"></i>
+                    <span class="font-medium">Demandes</span>
+                    <span class="ml-auto bg-danger text-white text-[10px] font-bold px-2 py-0.5 rounded-full" id="sidebar-badge">3</span>
+                </a>
+                <a href="reunions.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-file-alt w-5"></i><span class="font-medium">PV Réunions</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden">
+            
+            <!-- Top Navbar -->
+            <header class="h-20 bg-surface/80 backdrop-blur-md border-b border-border flex items-center justify-between px-8 shrink-0">
+                <div>
+                    <h2 class="text-xl font-bold text-primary font-serif flex items-center gap-3">
+                        <i class="fas fa-clipboard-list text-accent"></i> Demandes de Progression
+                        <span class="px-2 py-1 bg-danger/10 text-danger text-xs font-bold rounded-lg" id="header-badge">3 en attente</span>
+                    </h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="bg-surface p-1 rounded-xl flex text-sm font-bold text-muted">
+                        <button class="px-4 py-1.5 bg-surface text-primary rounded-lg shadow-sm">En attente (3)</button>
+                        <button class="px-4 py-1.5 hover:text-primary transition-colors">Traitées</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Body -->
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-6" id="requests-container">
+                
+                <!-- Request Card 1 (Fully Eligible) -->
+                <div class="request-card bg-surface p-6 rounded-3xl animate-fade-in-up" id="req-1" style="animation-delay: 0.1s">
+                    <div class="flex items-start justify-between">
+                        
+                        <div class="flex gap-6 w-full">
+                            <!-- Avatar -->
+                            <div class="w-14 h-14 rounded-full bg-accent text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-md">ML</div>
+                            
+                            <!-- Info -->
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-primary">Marie L.</h3>
+                                        <p class="text-xs text-muted">Demande soumise hier à 15:45</p>
+                                    </div>
+                                    <div class="level-badge flex items-center gap-3 bg-bg px-4 py-2 rounded-xl border border-border">
+                                        <span class="flex items-center gap-1 text-xs font-bold text-amber-500"><i class="fas fa-star"></i> Star</span>
+                                        <i class="fas fa-arrow-right text-gray-400 dark:text-gray-500"></i>
+                                        <span class="flex items-center gap-1 text-xs font-bold text-blue-500"><i class="fas fa-plane"></i> Pilote</span>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-3 gap-4 mt-6">
+                                    <div class="p-3 rounded-xl border border-success/20 bg-success/5 flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-success mt-0.5"></i>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-muted uppercase tracking-widest">Formations</p>
+                                            <p class="text-sm font-bold text-primary">10/10 <span class="font-normal text-xs text-muted">Modules</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 rounded-xl border border-success/20 bg-success/5 flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-success mt-0.5"></i>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-muted uppercase tracking-widest">Assiduité</p>
+                                            <p class="text-sm font-bold text-primary">95% <span class="font-normal text-xs text-muted">Présence</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 rounded-xl border border-success/20 bg-success/5 flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-success mt-0.5"></i>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-muted uppercase tracking-widest">Ancienneté</p>
+                                            <p class="text-sm font-bold text-primary">6 <span class="font-normal text-xs text-muted">Mois</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="mt-6 pt-6 border-t border-border flex justify-end gap-3">
+                        <button onclick="openRejectModal('req-1', 'Marie L.')" class="px-6 py-2.5 bg-surface border border-danger/20 text-danger hover:bg-danger/5 font-bold rounded-xl transition-colors text-sm">Refuser</button>
+                        <button onclick="approveRequest('req-1')" class="px-6 py-2.5 bg-success hover:bg-[#219653] text-white font-bold rounded-xl transition-colors text-sm shadow-md shadow-success/20 flex items-center gap-2">
+                            <i class="fas fa-check"></i> Valider la progression
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Request Card 2 (Partially Eligible - Needs pastoral judgment) -->
+                <div class="request-card bg-surface p-6 rounded-3xl animate-fade-in-up" id="req-2" style="animation-delay: 0.2s">
+                    <div class="flex items-start justify-between">
+                        <div class="flex gap-6 w-full">
+                            <div class="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-md">DK</div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-primary">David K.</h3>
+                                        <p class="text-xs text-muted">Demande soumise il y a 3 jours</p>
+                                    </div>
+                                    <div class="level-badge flex items-center gap-3 bg-bg px-4 py-2 rounded-xl border border-border">
+                                        <span class="flex items-center gap-1 text-xs font-bold text-blue-500"><i class="fas fa-plane"></i> Pilote</span>
+                                        <i class="fas fa-arrow-right text-gray-400 dark:text-gray-500"></i>
+                                        <span class="flex items-center gap-1 text-xs font-bold text-purple-500"><i class="fas fa-university"></i> Pilier</span>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-3 gap-4 mt-6">
+                                    <div class="p-3 rounded-xl border border-success/20 bg-success/5 flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-success mt-0.5"></i>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-muted uppercase tracking-widest">Formations</p>
+                                            <p class="text-sm font-bold text-primary">Complet</p>
+                                        </div>
+                                    </div>
+                                    <div class="stat-warning p-3 rounded-xl border border-amber-200 bg-amber-50 flex items-start gap-3">
+                                        <i class="fas fa-exclamation-triangle text-amber-500 mt-0.5"></i>
+                                        <div>
+                                            <p class="stat-label text-[10px] font-bold text-muted uppercase tracking-widest">Service</p>
+                                            <p class="text-sm font-bold text-primary">9/12 <span class="stat-sub font-normal text-xs text-muted">Sessions</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 rounded-xl border border-success/20 bg-success/5 flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-success mt-0.5"></i>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-muted uppercase tracking-widest">Ancienneté</p>
+                                            <p class="text-sm font-bold text-primary">14 <span class="font-normal text-xs text-muted">Mois</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-border flex justify-end gap-3">
+                        <button onclick="openRejectModal('req-2', 'David K.')" class="px-6 py-2.5 bg-surface border border-danger/20 text-danger hover:bg-danger/5 font-bold rounded-xl transition-colors text-sm">Refuser</button>
+                        <button onclick="approveRequest('req-2')" class="px-6 py-2.5 bg-success hover:bg-[#219653] text-white font-bold rounded-xl transition-colors text-sm shadow-md shadow-success/20 flex items-center gap-2">
+                            <i class="fas fa-check"></i> Valider par dérogation
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Request Card 3 -->
+                <div class="request-card bg-surface p-6 rounded-3xl animate-fade-in-up" id="req-3" style="animation-delay: 0.3s">
+                    <div class="flex items-start justify-between">
+                        <div class="flex gap-6 w-full">
+                            <div class="w-14 h-14 rounded-full bg-gray-200 text-muted flex items-center justify-center font-bold text-lg shrink-0 shadow-md">ET</div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-primary">Esther T.</h3>
+                                        <p class="text-xs text-muted">Demande soumise il y a 5 jours</p>
+                                    </div>
+                                    <div class="level-badge flex items-center gap-3 bg-bg px-4 py-2 rounded-xl border border-border">
+                                        <span class="flex items-center gap-1 text-xs font-bold text-muted"><i class="fas fa-seedling"></i> Nouveau</span>
+                                        <i class="fas fa-arrow-right text-gray-400 dark:text-gray-500"></i>
+                                        <span class="flex items-center gap-1 text-xs font-bold text-amber-500"><i class="fas fa-star"></i> Star</span>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4 mt-6">
+                                    <div class="p-3 rounded-xl border border-danger/20 bg-danger/5 flex items-start gap-3">
+                                        <i class="fas fa-times-circle text-danger mt-0.5"></i>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-muted uppercase tracking-widest">Formations</p>
+                                            <p class="text-sm font-bold text-danger">4/10 <span class="font-normal text-xs text-danger/60">Modules</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 rounded-xl border border-success/20 bg-success/5 flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-success mt-0.5"></i>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-muted uppercase tracking-widest">Assiduité</p>
+                                            <p class="text-sm font-bold text-primary">100%</p>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 rounded-xl border border-success/20 bg-success/5 flex items-start gap-3">
+                                        <i class="fas fa-check-circle text-success mt-0.5"></i>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-muted uppercase tracking-widest">Ancienneté</p>
+                                            <p class="text-sm font-bold text-primary">2 <span class="font-normal text-xs text-muted">Mois</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-border flex justify-end gap-3">
+                        <button onclick="openRejectModal('req-3', 'Esther T.')" class="px-6 py-2.5 bg-surface border border-danger/20 text-danger hover:bg-danger/5 font-bold rounded-xl transition-colors text-sm">Refuser</button>
+                        <button onclick="approveRequest('req-3')" class="px-6 py-2.5 bg-success hover:bg-[#219653] text-white font-bold rounded-xl transition-colors text-sm shadow-md shadow-success/20 flex items-center gap-2 opacity-50 cursor-not-allowed">
+                            <i class="fas fa-check"></i> Valider
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Reject Request -->
+    <div id="reject-modal" class="fixed inset-0 z-[100] flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-dark/60 backdrop-blur-sm" onclick="closeRejectModal()"></div>
+        <div class="relative w-full max-w-lg bg-surface rounded-3xl p-8 shadow-2xl animate-fade-in-up">
+            <h3 class="text-xl font-bold text-primary font-serif mb-2">Refuser la demande</h3>
+            <p class="text-sm text-muted mb-6">Fournissez un motif à <span id="reject-name" class="font-bold"></span> pour l'aider à comprendre ce qui manque pour progresser.</p>
+            
+            <textarea id="reject-reason" class="w-full bg-bg border-none rounded-2xl py-4 px-6 text-sm text-primary min-h-[120px] focus:ring-1 focus:ring-chef outline-none mb-6" placeholder="Ex: Il te manque encore 2 modules de formation à valider..."></textarea>
+            
+            <div class="flex gap-4">
+                <button onclick="closeRejectModal()" class="flex-1 py-3 bg-surface border border-border text-muted font-bold rounded-xl hover:bg-surface transition-colors">Annuler</button>
+                <button onclick="submitReject()" class="flex-1 py-3 bg-danger text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-md shadow-danger/20">Confirmer le refus</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentCount = 3;
+        let currentReqId = null;
+
+        function updateCounters() {
+            currentCount--;
+            if(currentCount > 0) {
+                document.getElementById('sidebar-badge').innerText = currentCount;
+                document.getElementById('header-badge').innerText = `${currentCount} en attente`;
+            } else {
+                document.getElementById('sidebar-badge').classList.add('hidden');
+                document.getElementById('header-badge').innerText = `0 en attente`;
+                document.getElementById('header-badge').classList.replace('bg-danger/10', 'bg-success/10');
+                document.getElementById('header-badge').classList.replace('text-danger', 'text-success');
+                
+                // Show empty state
+                if(document.querySelectorAll('.request-card:not(.hidden)').length === 0) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = "flex flex-col items-center justify-center h-64 text-muted animate-fade-in-up";
+                    emptyState.innerHTML = `
+                        <i class="fas fa-check-circle text-5xl mb-4 text-success/50"></i>
+                        <p class="text-lg font-medium">Toutes les demandes ont été traitées.</p>
+                        <p class="text-sm mt-1">Excellent travail, Chef !</p>
+                    `;
+                    document.getElementById('requests-container').appendChild(emptyState);
+                }
+            }
+        }
+
+        function approveRequest(id) {
+            const card = document.getElementById(id);
+            // Flash green border then slide out
+            card.style.borderColor = '#27AE60';
+            card.style.backgroundColor = 'rgba(39, 174, 96, 0.05)';
+            
+            setTimeout(() => {
+                card.classList.add('animate-slide-out-right');
+                setTimeout(() => {
+                    card.classList.add('hidden');
+                    updateCounters();
+                }, 500);
+            }, 300);
+        }
+
+        function openRejectModal(id, name) {
+            currentReqId = id;
+            document.getElementById('reject-name').innerText = name;
+            document.getElementById('reject-reason').value = '';
+            document.getElementById('reject-modal').classList.remove('hidden');
+        }
+
+        function closeRejectModal() {
+            document.getElementById('reject-modal').classList.add('hidden');
+            currentReqId = null;
+        }
+
+        function submitReject() {
+            if(!currentReqId) return;
+            const card = document.getElementById(currentReqId);
+            closeRejectModal();
+            
+            // Flash red border then slide out
+            card.style.borderColor = '#E74C3C';
+            card.style.backgroundColor = 'rgba(231, 76, 60, 0.05)';
+            
+            setTimeout(() => {
+                card.classList.add('animate-slide-out-right');
+                setTimeout(() => {
+                    card.classList.add('hidden');
+                    updateCounters();
+                }, 500);
+            }, 300);
+        }
+    </script>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()" class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+</html>

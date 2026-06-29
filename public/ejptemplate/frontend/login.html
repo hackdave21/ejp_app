@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion | EJP - Église des Jeunes Prodiges</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+                .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.6s ease-out forwards',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-10px)' },
+                            '75%': { transform: 'translateX(10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 0 0 rgba(245, 166, 35, 0.4)' },
+                            '50%': { boxShadow: '0 0 0 10px rgba(245, 166, 35, 0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+       body {
+    background-color: #000000;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .shimmer-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shimmer-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0) 40%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0) 60%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(45deg);
+            transition: all 0.3s;
+            opacity: 0;
+        }
+
+        .shimmer-btn:hover::after {
+            animation: shimmer 1.5s infinite;
+            opacity: 1;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-150%) rotate(45deg); }
+            100% { transform: translateX(150%) rotate(45deg); }
+        }
+
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%23F5A623' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        input:focus {
+            box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.4);
+            outline: none;
+        }
+
+        .error-border {
+            border-color: #E74C3C !important;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
+        }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+        
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="bg-pattern"></div>
+
+    <div class="w-full max-w-6xl flex flex-col lg:flex-row glass-card rounded-3xl overflow-hidden relative z-10 animate-fade-up" style="height: calc(100vh - 2rem); max-height: 750px;">
+        
+        <!-- Illustration Side (Desktop Only) -->
+        <div class="hidden lg:flex lg:w-1/2 bg-primary relative items-center justify-center p-12 overflow-hidden">
+            <div class="absolute inset-0 ">
+                <img src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=1000&auto=format&fit=crop" alt="EJP Community" class="w-full h-full object-cover">
+            </div>
+            <div class="relative z-10 text-center">
+                <h2 class="text-white text-4xl font-serif mb-6 leading-tight" data-i18n="login.verse">"Que personne ne méprise ta jeunesse."</h2>
+                <p class="text-accent text-xl font-light" data-i18n="login.verse_ref">1 Timothée 4:12</p>
+                <div class="mt-12 w-24 h-1 bg-accent mx-auto rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Login Form Side -->
+        <div class="w-full lg:w-1/2 p-8 lg:p-16 flex flex-col justify-center">
+            <div class="text-center mb-10">
+                <div class="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-accent shadow-lg shadow-accent/20">
+                    <span class="text-accent text-3xl font-serif tracking-widest font-bold">EJP</span>
+                </div>
+                <h1 class="text-white text-2xl font-serif mb-2" data-i18n="login.welcome">Bienvenue</h1>
+                <p class="text-white/60 font-light" data-i18n="login.subtitle">Accédez à votre espace membre</p>
+            </div>
+
+            <form id="loginForm" class="space-y-6">
+                <!-- Username/Email -->
+                <div>
+                    <label class="block text-white/80 text-sm font-medium mb-2 ml-1" for="identifier" data-i18n="login.id_label">Identifiant ou e-mail</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted group-focus-within:text-accent transition-colors">
+                            <i class="fas fa-user text-sm"></i>
+                        </div>
+                        <input type="text" id="identifier" placeholder="Votre identifiant" data-i18n="login.id_placeholder" 
+                            class="w-full bg-white/10 border border-white/20 rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30 transition-all duration-300">
+                    </div>
+                    <p id="identifierError" class="text-danger text-xs mt-1 ml-1 hidden animate-fade-in" data-i18n="login.id_error">Ce champ est obligatoire</p>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <div class="flex justify-between items-center mb-2 ml-1">
+                        <label class="block text-white/80 text-sm font-medium" for="password" data-i18n="login.pw_label">Mot de passe</label>
+                        <a href="#" class="text-accent text-xs hover:underline" data-i18n="login.pw_forgot">Mot de passe oublié ?</a>
+                    </div>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted group-focus-within:text-accent transition-colors">
+                            <i class="fas fa-lock text-sm"></i>
+                        </div>
+                        <input type="password" id="password" placeholder="••••••••" 
+                            class="w-full bg-white/10 border border-white/20 rounded-xl py-3 pl-11 pr-12 text-white placeholder-white/30 transition-all duration-300">
+                        <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-4 flex items-center text-muted hover:text-white transition-colors">
+                            <i class="fas fa-eye text-sm" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                    <p id="passwordError" class="text-danger text-xs mt-1 ml-1 hidden animate-fade-in" data-i18n="login.pw_error">Le mot de passe est requis</p>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="flex items-center">
+                    <input type="checkbox" id="remember" class="w-4 h-4 rounded border-white/20 bg-white/10 text-accent focus:ring-accent accent-accent">
+                    <label for="remember" class="ml-2 text-white/60 text-sm cursor-pointer select-none" data-i18n="login.remember">Rester connecté</label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn" class="shimmer-btn w-full bg-accent hover:bg-accent/90 text-primary font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent/20 flex items-center justify-center">
+                    <span id="btnText" data-i18n="login.submit">Se connecter</span>
+                    <div id="btnLoader" class="hidden">
+                        <svg class="animate-spin h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnLoader = document.getElementById('btnLoader');
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+        const card = document.querySelector('.glass-card');
+
+        // Toggle Password Visibility
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            eyeIcon.classList.toggle('fa-eye');
+            eyeIcon.classList.toggle('fa-eye-slash');
+        });
+
+        // Form Validation & Submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Start Loading
+            setLoading(true);
+
+            // Simulate API Call with brief spinner
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+        });
+
+        function setLoading(isLoading) {
+            if (isLoading) {
+                submitBtn.disabled = true;
+                btnText.classList.add('hidden');
+                btnLoader.classList.remove('hidden');
+            } else {
+                submitBtn.disabled = false;
+                btnText.classList.remove('hidden');
+                btnLoader.classList.add('hidden');
+            }
+        }
+
+        function shakeCard() {
+            card.classList.remove('animate-fade-up');
+            card.classList.add('animate-shake');
+            setTimeout(() => {
+                card.classList.remove('animate-shake');
+            }, 500);
+        }
+
+        // Add some floating animation to the background pattern
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.querySelector('.bg-pattern').style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    </script>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()" class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+
+   <!-- Language Switcher Floating -->
+<div class="fixed top-8 right-8 z-50 flex items-center gap-2 text-sm font-mono tracking-widest bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 shadow-lg">
+    <button class="lang-switcher transition-colors" data-lang="fr">FR</button>
+    <span class="text-white/30">|</span>
+    <button class="lang-switcher transition-colors" data-lang="en">EN</button>
+</div>
+<script>
+    function updateLangButtons(activeLang) {
+    document.querySelectorAll('.lang-switcher').forEach(btn => {
+        btn.classList.remove('text-accent', 'font-bold');
+        btn.style.color = '';  // reset
+
+        if (btn.dataset.lang === activeLang) {
+            btn.classList.add('text-accent', 'font-bold');
+        } else {
+            btn.style.color = 'rgba(255, 255, 255, 0.7)';
+        }
+    });
+}
+
+    // Init avec la langue par défaut
+    const defaultLang = localStorage.getItem('lang') || 'fr';
+    updateLangButtons(defaultLang);
+
+    // Au clic
+    document.querySelectorAll('.lang-switcher').forEach(btn => {
+        btn.addEventListener('click', () => {
+            updateLangButtons(btn.dataset.lang);
+        });
+    });
+</script>
+    <!-- i18n Script -->
+    <script src="assets/js/i18n.js"></script>
+</body>
+</html>

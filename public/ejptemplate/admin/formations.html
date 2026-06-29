@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Formations | EJP Admin</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+                .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideInRight: { '0%': { transform: 'translateX(100%)' }, '100%': { transform: 'translateX(0)' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .sidebar-link.active { background-color: rgba(245, 166, 35, 0.1); color: #F5A623; border-right: 4px solid #F5A623; }
+        .sidebar-link:not(.active):hover { background-color: rgba(255, 255, 255, 0.05); }
+        
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .accordion-item.active .accordion-content { max-height: 1000px; transition: max-height 0.5s ease-in; }
+        .accordion-item.active .chevron { transform: rotate(180deg); }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .compulsory-badge { background-color: rgba(231, 76, 60, 0.1); color: #E74C3C; }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+        
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-bg font-sans text-text overflow-hidden">
+    
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar Admin (Reused & Unified) -->
+        <aside class="w-[280px] bg-surface border-r border-border flex flex-col h-full z-50">
+            <div class="p-8 flex items-center gap-4">
+                <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center border border-accent">
+                    <span class="text-accent font-serif font-bold text-xl">EJP</span>
+                </div>
+                <div><h1 class="font-serif font-bold text-lg leading-tight">Admin Panel</h1></div>
+            </div>
+            <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+                <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-chart-pie w-5"></i><span class="font-medium">Tableau de bord</span>
+                </a>
+                <a href="membres.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-users w-5"></i><span class="font-medium">Membres</span>
+                </a>
+                <a href="chefs.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-user-tie w-5"></i><span class="font-medium">Chefs & Groupes</span>
+                </a>
+                <a href="formations.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                    <i class="fas fa-graduation-cap w-5"></i><span class="font-medium">Formations</span>
+                </a>
+                <a href="cultes.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-church w-5"></i><span class="font-medium">Cultes</span>
+                </a>
+                <a href="reunions.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-file-alt w-5"></i><span class="font-medium">PV Réunions</span>
+                </a>
+                <a href="evenements.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-calendar-check w-5"></i><span class="font-medium">Événements</span>
+                </a>
+                <a href="communications.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-paper-plane w-5"></i><span class="font-medium">Communications</span>
+                </a>
+                <a href="parametres.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-sliders-h w-5"></i><span class="font-medium">Paramètres</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden">
+            
+            <!-- Top Navbar -->
+            <header class="h-20 bg-surface border-b border-border flex items-center justify-between px-8 shrink-0">
+                <h2 class="text-xl font-bold text-primary">🎓 Gestion des Formations</h2>
+                <button id="add-module-btn" class="bg-accent text-primary font-bold px-6 py-2.5 rounded-xl hover:scale-105 transition-transform flex items-center gap-2">
+                    <i class="fas fa-plus"></i> Créer un module
+                </button>
+            </header>
+
+            <!-- Scrollable Body -->
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-6">
+                
+                <!-- Module Accordion 1 -->
+                <div class="accordion-item bg-surface rounded-3xl shadow-sm border border-border overflow-hidden active">
+                    <!-- Accordion Trigger -->
+                    <div class="p-6 flex items-center justify-between cursor-pointer group" onclick="this.parentElement.classList.toggle('active')">
+                        <div class="flex items-center gap-6">
+                            <div class="w-14 h-14 bg-blue-50 text-primary rounded-2xl flex items-center justify-center text-xl">
+                                <i class="fas fa-pray"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-primary">Fondements de la Foi</h3>
+                                <p class="text-xs text-muted font-medium">4 vidéos • Durée totale : 45 min</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <div class="hidden md:flex gap-2">
+                                <button class="px-4 py-2 bg-surface text-muted text-[10px] font-bold uppercase rounded-lg hover:bg-surface transition-colors">Éditer le module</button>
+                                <button class="px-4 py-2 bg-danger/10 text-danger text-[10px] font-bold uppercase rounded-lg hover:bg-danger hover:text-white transition-colors"><i class="fas fa-trash"></i></button>
+                            </div>
+                            <i class="fas fa-chevron-down chevron transition-transform text-muted"></i>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Content -->
+                    <div class="accordion-content border-t border-border bg-[#FBFBFF]">
+                        <div class="p-6 space-y-4">
+                            <!-- Video Item -->
+                            <div class="flex items-center justify-between p-4 bg-surface rounded-2xl border border-border group">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 bg-surface rounded-lg flex items-center justify-center text-muted cursor-move">
+                                        <i class="fas fa-grip-vertical"></i>
+                                    </div>
+                                    <div class="w-20 aspect-video bg-dark rounded-lg flex items-center justify-center relative overflow-hidden">
+                                        <i class="fas fa-play text-white/20 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-primary">1. Comprendre la Grâce</h4>
+                                        <div class="flex items-center gap-3 mt-1">
+                                            <span class="text-[10px] font-bold text-muted">12:00</span>
+                                            <span class="text-[10px] font-bold compulsory-badge px-2 py-0.5 rounded uppercase">Obligatoire</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted hover:bg-gray-200 transition-all"><i class="fas fa-edit text-xs"></i></button>
+                                    <button class="w-8 h-8 rounded-lg bg-danger/10 text-danger hover:bg-danger hover:text-white transition-all"><i class="fas fa-times text-xs"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Video Item 2 -->
+                            <div class="flex items-center justify-between p-4 bg-surface rounded-2xl border border-border group">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 bg-surface rounded-lg flex items-center justify-center text-muted cursor-move">
+                                        <i class="fas fa-grip-vertical"></i>
+                                    </div>
+                                    <div class="w-20 aspect-video bg-dark rounded-lg flex items-center justify-center relative overflow-hidden">
+                                        <i class="fas fa-play text-white/20 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-primary">2. La Prière Efficace</h4>
+                                        <div class="flex items-center gap-3 mt-1">
+                                            <span class="text-[10px] font-bold text-muted">08:30</span>
+                                            <span class="text-[10px] font-bold bg-success/10 text-success px-2 py-0.5 rounded uppercase">Optionnel</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted hover:bg-gray-200 transition-all"><i class="fas fa-edit text-xs"></i></button>
+                                    <button class="w-8 h-8 rounded-lg bg-danger/10 text-danger hover:bg-danger hover:text-white transition-all"><i class="fas fa-times text-xs"></i></button>
+                                </div>
+                            </div>
+
+                            <button class="w-full py-4 border-2 border-dashed border-border text-muted font-bold rounded-2xl hover:border-accent hover:text-accent transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-plus-circle"></i> Ajouter une vidéo à ce module
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module Accordion 2 -->
+                <div class="accordion-item bg-surface rounded-3xl shadow-sm border border-border overflow-hidden">
+                    <div class="p-6 flex items-center justify-between cursor-pointer group" onclick="this.parentElement.classList.toggle('active')">
+                        <div class="flex items-center gap-6">
+                            <div class="w-14 h-14 bg-amber-50 text-accent rounded-2xl flex items-center justify-center text-xl">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-primary">Vie en Communauté</h3>
+                                <p class="text-xs text-muted font-medium">3 vidéos • Durée totale : 32 min</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-down chevron transition-transform text-muted"></i>
+                    </div>
+                    <div class="accordion-content border-t border-border bg-[#FBFBFF]">
+                        <div class="p-6">
+                            <p class="text-center text-muted italic text-sm">Chargement des vidéos...</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Drawer: Add Module -->
+    <div id="add-drawer" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-dark/60 backdrop-blur-sm animate-fade-in" onclick="document.getElementById('add-drawer').classList.add('hidden')"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-surface shadow-2xl animate-slide-in-right p-10 overflow-y-auto custom-scrollbar">
+            <h3 class="text-2xl font-bold text-primary font-serif mb-10">Créer un module</h3>
+            <form class="space-y-6">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Titre du module</label>
+                    <input type="text" class="w-full bg-bg border-none rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-accent/20" placeholder="Ex: Vie en Christ">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Catégorie</label>
+                    <select class="w-full bg-bg border-none rounded-xl py-3 px-4 text-sm text-muted outline-none">
+                        <option>Fondements</option>
+                        <option>Leadership</option>
+                        <option>Ministères</option>
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Icône (FontAwesome)</label>
+                    <input type="text" class="w-full bg-bg border-none rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-accent/20" placeholder="Ex: fa-bible">
+                </div>
+                <div class="pt-6">
+                    <button type="button" onclick="document.getElementById('add-drawer').classList.add('hidden')" class="w-full py-4 bg-primary text-primary-text font-bold rounded-2xl hover:bg-dark transition-colors shadow-lg shadow-primary/20">Créer le module</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('add-module-btn').onclick = () => {
+            document.getElementById('add-drawer').classList.remove('hidden');
+        };
+    </script>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()" class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+</html>

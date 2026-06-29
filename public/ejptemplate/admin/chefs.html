@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chefs & Groupes | EJP Admin</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+                .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .sidebar-link.active { background-color: rgba(245, 166, 35, 0.1); color: #F5A623; border-right: 4px solid #F5A623; }
+        .sidebar-link:not(.active):hover { background-color: rgba(255, 255, 255, 0.05); }
+        
+        .group-card { transition: all 0.3s ease; }
+        .group-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); }
+        
+        .progress-fill { transition: width 1.5s cubic-bezier(0.65, 0, 0.35, 1); }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+        
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-bg font-sans text-text overflow-hidden">
+    
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar Admin (Reused) -->
+        <aside class="w-[280px] bg-surface border-r border-border flex flex-col h-full z-50">
+            <div class="p-8 flex items-center gap-4">
+                <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center border border-accent">
+                    <span class="text-accent font-serif font-bold text-xl">EJP</span>
+                </div>
+                <div><h1 class="font-serif font-bold text-lg leading-tight">Admin Panel</h1></div>
+            </div>
+            <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+                <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-chart-pie w-5"></i><span class="font-medium">Tableau de bord</span>
+                </a>
+                <a href="membres.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-users w-5"></i><span class="font-medium">Membres</span>
+                </a>
+                <a href="chefs.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                    <i class="fas fa-user-tie w-5"></i><span class="font-medium">Chefs & Groupes</span>
+                </a>
+                <a href="formations.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-graduation-cap w-5"></i><span class="font-medium">Formations</span>
+                </a>
+                <a href="cultes.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-church w-5"></i><span class="font-medium">Cultes</span>
+                </a>
+                <a href="reunions.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-file-alt w-5"></i><span class="font-medium">PV Réunions</span>
+                </a>
+                <a href="evenements.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-calendar-check w-5"></i><span class="font-medium">Événements</span>
+                </a>
+                <a href="communications.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-paper-plane w-5"></i><span class="font-medium">Communications</span>
+                </a>
+                <a href="parametres.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-sliders-h w-5"></i><span class="font-medium">Paramètres</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden">
+            
+            <!-- Top Navbar -->
+            <header class="h-20 bg-surface border-b border-border flex items-center justify-between px-8 shrink-0">
+                <h2 class="text-xl font-bold text-primary">👔 Gestion des Chefs & Groupes</h2>
+                <div class="flex items-center gap-4">
+                    <button class="bg-accent text-primary font-bold px-6 py-2.5 rounded-xl hover:scale-105 transition-transform flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Créer un groupe
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Body -->
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-12">
+                
+                <!-- Section 1: Groups Grid -->
+                <section>
+                    <h3 class="text-lg font-bold text-primary font-serif mb-6">Groupes actifs</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
+                        <!-- Group Card 1 -->
+                        <div class="group-card bg-surface p-6 rounded-3xl shadow-sm border border-border animate-fade-in-up" style="animation-delay: 0.1s">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-12 h-12 bg-blue-50 text-primary rounded-2xl flex items-center justify-center font-bold text-lg">D</div>
+                                <div class="flex gap-2">
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted hover:bg-surface"><i class="fas fa-edit text-xs"></i></button>
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted hover:bg-surface"><i class="fas fa-eye text-xs"></i></button>
+                                </div>
+                            </div>
+                            <h4 class="text-xl font-bold text-primary mb-1">Groupe David</h4>
+                            <p class="text-sm text-muted mb-6">Chef : <span class="text-primary font-medium">Chef Amos</span></p>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-muted font-bold uppercase">Membres</span>
+                                    <span class="text-primary font-bold">24 / 50</span>
+                                </div>
+                                <div class="w-full h-2 bg-surface rounded-full overflow-hidden">
+                                    <div class="progress-fill h-full bg-accent rounded-full" style="width: 0%" data-width="48%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-muted font-bold uppercase">Progression moy.</span>
+                                    <span class="text-success font-bold">65%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Group Card 2 -->
+                        <div class="group-card bg-surface p-6 rounded-3xl shadow-sm border border-border animate-fade-in-up" style="animation-delay: 0.2s">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-12 h-12 bg-amber-50 text-accent rounded-2xl flex items-center justify-center font-bold text-lg">E</div>
+                                <div class="flex gap-2">
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted hover:bg-surface"><i class="fas fa-edit text-xs"></i></button>
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted hover:bg-surface"><i class="fas fa-eye text-xs"></i></button>
+                                </div>
+                            </div>
+                            <h4 class="text-xl font-bold text-primary mb-1">Groupe Esther</h4>
+                            <p class="text-sm text-muted mb-6">Chef : <span class="text-primary font-medium">Chef Marie</span></p>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-muted font-bold uppercase">Membres</span>
+                                    <span class="text-primary font-bold">18 / 40</span>
+                                </div>
+                                <div class="w-full h-2 bg-surface rounded-full overflow-hidden">
+                                    <div class="progress-fill h-full bg-accent rounded-full" style="width: 0%" data-width="45%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-muted font-bold uppercase">Progression moy.</span>
+                                    <span class="text-success font-bold">72%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Group Card 3 -->
+                        <div class="group-card bg-surface p-6 rounded-3xl shadow-sm border border-border animate-fade-in-up" style="animation-delay: 0.3s">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="w-12 h-12 bg-purple-50 text-purple-500 rounded-2xl flex items-center justify-center font-bold text-lg">G</div>
+                                <div class="flex gap-2">
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted hover:bg-surface"><i class="fas fa-edit text-xs"></i></button>
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted hover:bg-surface"><i class="fas fa-eye text-xs"></i></button>
+                                </div>
+                            </div>
+                            <h4 class="text-xl font-bold text-primary mb-1">Groupe Gédéon</h4>
+                            <p class="text-sm text-muted mb-6">Chef : <span class="text-primary font-medium">Chef Paul</span></p>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-muted font-bold uppercase">Membres</span>
+                                    <span class="text-primary font-bold">32 / 50</span>
+                                </div>
+                                <div class="w-full h-2 bg-surface rounded-full overflow-hidden">
+                                    <div class="progress-fill h-full bg-accent rounded-full" style="width: 0%" data-width="64%"></div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-muted font-bold uppercase">Progression moy.</span>
+                                    <span class="text-success font-bold">58%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Section 2: Chefs Table -->
+                <section>
+                    <h3 class="text-lg font-bold text-primary font-serif mb-6">Liste des Chefs</h3>
+                    <div class="bg-surface rounded-3xl shadow-sm border border-border overflow-hidden">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-surface border-b border-border">
+                                <tr class="text-muted text-[10px] font-bold uppercase tracking-widest">
+                                    <th class="py-4 px-8">Nom</th>
+                                    <th class="py-4 px-8">Rôle</th>
+                                    <th class="py-4 px-8">Téléphone</th>
+                                    <th class="py-4 px-8">Groupes</th>
+                                    <th class="py-4 px-8 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-50">
+                                <tr>
+                                    <td class="py-4 px-8 font-bold text-primary">Chef Amos</td>
+                                    <td class="py-4 px-8"><span class="px-3 py-1 bg-primary text-primary-text text-[10px] font-bold rounded-full">CHEF DE GROUPE</span></td>
+                                    <td class="py-4 px-8 text-muted">+225 07 08 09 10 11</td>
+                                    <td class="py-4 px-8 text-muted">Groupe David</td>
+                                    <td class="py-4 px-8 text-right">
+                                        <button class="text-accent font-bold hover:underline">Gérer</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4 px-8 font-bold text-primary">Chef Marie</td>
+                                    <td class="py-4 px-8"><span class="px-3 py-1 bg-primary text-primary-text text-[10px] font-bold rounded-full">CHEF DE GROUPE</span></td>
+                                    <td class="py-4 px-8 text-muted">+225 05 06 07 08 09</td>
+                                    <td class="py-4 px-8 text-muted">Groupe Esther</td>
+                                    <td class="py-4 px-8 text-right">
+                                        <button class="text-accent font-bold hover:underline">Gérer</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- Progress Animation ---
+        window.addEventListener('load', () => {
+            const fills = document.querySelectorAll('.progress-fill');
+            setTimeout(() => {
+                fills.forEach(fill => {
+                    fill.style.width = fill.getAttribute('data-width');
+                });
+            }, 300);
+        });
+    </script>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()" class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+</html>

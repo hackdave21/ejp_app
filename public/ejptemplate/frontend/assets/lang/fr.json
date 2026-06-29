@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "title": "Église des Jeunes Prodiges",
+    "home": "Accueil",
+    "about": "À propos",
+    "parcours": "Parcours",
+    "events": "Événements",
+    "formations": "Formations",
+    "login": "Se connecter"
+  },
+  "hero": {
+    "welcome": "BIENVENUE À L'ÉGLISE DES JEUNES PRODIGES",
+    "title1": "Une Génération",
+    "title2": "Consacrée",
+    "cta": "Se connecter à mon espace",
+    "slide1": "Une communauté soudée par la foi",
+    "slide2": "Grandissez dans votre parcours spirituel",
+    "slide3": "La jeunesse au service de Dieu",
+    "slide4": "Formez-vous. Progressez. Servez.",
+    "slide5": "Impactez votre génération et le monde"
+  },
+  "about": {
+    "identity": "Notre Identité",
+    "subtitle": "Qui sommes-nous ?",
+    "title": "Une église animée par la vision d'ANAGKAZO",
+    "description": "Ayant une vision claire provenant de l'ordre suprême de Matthieu 28:19 — <em>« Allez, faites de toutes les nations des disciples »</em> — l'Église des Jeunes Prodiges a pour vision d'aller chercher activement les âmes, en particulier la jeunesse, pour les accueillir, les former et faire d'eux des disciples accomplis.",
+    "p1": "L'Église des Jeunes Prodiges est plus qu'un simple lieu de rassemblement. C'est une communauté vibrante où chaque jeune est appelé à découvrir son potentiel divin et à l'utiliser pour la gloire de Dieu.",
+    "p2": "Notre mission est de bâtir une génération consacrée, ancrée dans la Parole, et équipée pour impacter positivement son environnement à travers le monde.",
+    "verse": "« Que personne ne méprise ta jeunesse; mais sois un modèle pour les fidèles, en parole, en conduite, en charité, en foi, en pureté. »",
+    "verse_ref": "— 1 Timothée 4:12",
+    "verse_container": "« Que personne ne méprise ta jeunesse ; mais sois un modèle pour les fidèles... » <span class=\"font-bold not-italic ml-2\">— 1 Timothée 4:12</span>",
+    "item1_title": "Communauté",
+    "item1_desc": "Des liens fraternels authentiques et durables",
+    "item2_title": "Formation",
+    "item2_desc": "Un parcours structuré vers la maturité spirituelle",
+    "item3_title": "Mission",
+    "item3_desc": "Formés pour servir au-delà des murs de l'église",
+    "stat1_lbl": "Membres actifs",
+    "stat2_lbl": "Niveaux de progression",
+    "stat3_lbl": "D'existence",
+    "stat3_unit": "ans",
+    "stat4_lbl": "Numérique"
+  },
+  "parcours": {
+    "subtitle": "Votre Parcours",
+    "title": "De Nouveau Membre à Missionnaire",
+    "desc": "Un chemin de croissance pensé pour chaque disciple",
+    "level1_title": "Nouveau Membre",
+    "level1_desc": "Accueil et intégration dans la famille.",
+    "level2_title": "Star",
+    "level2_desc": "Fondements validés, membre actif.",
+    "level3_title": "Pilote",
+    "level3_desc": "Engagé dans le service de l'église.",
+    "level4_title": "Pilier",
+    "level4_desc": "Leader solide et modèle pour la communauté.",
+    "level5_title": "Missionnaire",
+    "level5_desc": "Envoyé pour implanter ou diriger au-delà."
+  },
+  "events": {
+    "subtitle": "Calendrier",
+    "title": "Nos Prochains Événements",
+    "desc": "Rejoignez-nous lors de nos prochains rassemblements",
+    "ev1_date": "15 Nov",
+    "ev1_title": "Culte d'Actions de Grâce",
+    "ev1_time": "09:00 - 12:00",
+    "ev1_loc": "Sanctuaire Principal",
+    "ev2_date": "20 Nov",
+    "ev2_title": "Veillée de Prière",
+    "ev2_time": "22:00 - 04:00",
+    "ev2_loc": "Chapelle",
+    "ev3_date": "25 Nov",
+    "ev3_title": "Séminaire des Leaders",
+    "ev3_time": "14:00 - 18:00",
+    "ev3_loc": "Salle de Conférence"
+  },
+  "formations": {
+    "subtitle": "Espace Formation",
+    "title": "Développez Vos Compétences",
+    "desc": "Connectez-vous pour reprendre là où vous en étiez et découvrir de nouveaux modules exclusifs.",
+    "cta": "Reprendre mes formations"
+  },
+  "suggestions": {
+    "subtitle": "Votre Voix",
+    "title": "Boîte à Suggestions",
+    "desc": "Une idée pour améliorer la plateforme ou pour l'EJP ? Votre avis compte énormément pour nous. N'hésitez pas à nous en faire part (anonymement si vous le souhaitez).",
+    "cta": "Faire une suggestion"
+  },
+  "footer": {
+    "verse": "« Vous, au contraire, vous êtes une race élue, un sacerdoce royal, une nation sainte, un peuple acquis, afin que vous annonciez les vertus de celui qui vous a appelés des ténèbres à son admirable lumière. »",
+    "verse_ref": "— 1 Pierre 2:9",
+    "rights": "© 2026 Église des Jeunes Prodiges.<br>Tous droits réservés.",
+    "contact": "Vous n'avez pas de compte ou vous rencontrez un problème ? Contactez-nous au :",
+    "made_by": "Made by EJP · Version 1.0 · 2026"
+  },
+  "login": {
+    "verse": "\"Que personne ne méprise ta jeunesse.\"",
+    "verse_ref": "1 Timothée 4:12",
+    "welcome": "Bienvenue",
+    "subtitle": "Accédez à votre espace membre",
+    "id_label": "Identifiant ou e-mail",
+    "id_placeholder": "Votre identifiant",
+    "id_error": "Ce champ est obligatoire",
+    "pw_label": "Mot de passe",
+    "pw_forgot": "Mot de passe oublié ?",
+    "pw_error": "Le mot de passe est requis",
+    "remember": "Rester connecté",
+    "submit": "Se connecter",
+    "no_account": "Pas encore membre ?",
+    "join": "Rejoignez-nous"
+  }
+}

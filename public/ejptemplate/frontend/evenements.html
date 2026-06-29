@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Événements | EJP - Église des Jeunes Prodiges</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+
+        .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'slide-up-modal': 'slideUpModal 0.4s ease-out forwards',
+                        'pulse-slow': 'pulseSlow 2s infinite',
+                        'fade-in-stagger': 'fadeInStagger 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        slideUpModal: {
+                            '0%': { transform: 'translateY(100%)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        pulseSlow: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.6' },
+                        },
+                        fadeInStagger: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .sidebar-link.active {
+            background-color: #F5A623;
+            color: #1E3A5F;
+        }
+
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #1E3A5F;
+        }
+
+        .sidebar-link:not(.active):hover {
+            background-color: rgba(245, 166, 35, 0.1);
+            color: #F5A623;
+        }
+
+        .event-card:hover .event-image {
+            transform: scale(1.05);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .modal-overlay {
+            background: rgba(15, 27, 45, 0.8);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-surface font-sans text-text overflow-hidden">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Sidebar (Reused) -->
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-[260px] bg-dark text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+            <div class="flex flex-col h-full">
+                <div class="p-6 flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center border border-accent">
+                        <span class="text-accent font-serif font-bold">EJP</span>
+                    </div>
+
+                </div>
+                <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
+                    <a href="dashboard.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-home w-5"></i>
+                        <span class="font-medium">Tableau de bord</span>
+                    </a>
+                    <a href="formations.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-graduation-cap w-5"></i>
+                        <span class="font-medium">Mes formations</span>
+                    </a>
+                    <a href="progression.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-chart-line w-5"></i>
+                        <span class="font-medium">Ma progression</span>
+                    </a>
+                    <a href="evenements.html"
+                        class="sidebar-link active relative flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                        <i class="fas fa-calendar-alt w-5"></i>
+                        <span class="font-medium">Événements</span>
+                    </a>
+                    <a href="notifications.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-bell w-5"></i>
+                        <span class="font-medium">Notifications</span>
+                    </a>
+                    <a href="compte.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-cog w-5"></i>
+                        <span class="font-medium">Mon compte</span>
+                    </a>
+                </nav>
+                <div class="p-4 border-t border-border space-y-1">
+                    <a href="index.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-globe w-5"></i>
+                        <span class="font-medium">Retour à l'accueil</span>
+                    </a>
+                    <a href="login.html"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-danger hover:bg-danger/10">
+                        <i class="fas fa-door-open w-5"></i>
+                        <span class="font-medium">Déconnexion</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col lg:ml-[260px] h-screen overflow-hidden">
+
+            <!-- Top Header -->
+            <header
+                class="sticky top-0 z-30 bg-surface border-b border-border px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" class="lg:hidden text-primary text-2xl"><i
+                            class="fas fa-bars"></i></button>
+                    <h2 class="text-xl font-bold text-primary"><i class="fas fa-calendar-alt text-accent"></i>
+                        Événements</h2>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-primary font-bold">
+                        JK</div>
+                </div>
+            </header>
+
+            <!-- Scrollable Body -->
+            <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
+
+                <!-- Hero Section -->
+                <section
+                    class="bg-white dark:bg-black border border-border dark:border-white/10 rounded-3xl p-8 text-text mb-10 relative overflow-hidden shadow-sm dark:shadow-none animate-fade-in-stagger">
+                    <div class="relative z-10 max-w-2xl">
+                        <span
+                            class="px-3 py-1 bg-accent/10 text-accent text-[10px] font-bold rounded-full border border-accent/20 uppercase tracking-widest">Événements</span>
+                        <h1 class="text-3xl sm:text-4xl font-serif text-primary mt-4 mb-2">Événements de l'EJP</h1>
+                        <p class="text-muted text-sm sm:text-base leading-relaxed">
+                            Ne manquez aucun rassemblement de notre communauté. Participez aux cultes, retraites et
+                            activités.
+                        </p>
+                    </div>
+                    <div
+                        class="absolute right-0 top-0 h-full w-1/3 bg-accent/5 skew-x-[-20deg] translate-x-1/2 hidden md:block">
+                    </div>
+                </section>
+
+                <!-- Upcoming Events Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+
+                    <!-- Event 1 -->
+                    <div class="event-card bg-surface rounded-2xl shadow-sm border border-border overflow-hidden transition-all hover:shadow-md animate-fade-in-stagger"
+                        style="animation-delay: 0.1s">
+                        <div class="relative aspect-video overflow-hidden bg-primary">
+                            <!-- Placeholder Image -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-primary to-marine-light flex items-center justify-center p-6 text-center">
+                                <div class="border-2 border-accent/30 p-4 rounded-lg">
+                                    <h4 class="text-accent font-serif text-lg leading-tight">CULTE DE PENTECÔTE</h4>
+                                    <div class="w-12 h-0.5 bg-accent mx-auto mt-2"></div>
+                                </div>
+                            </div>
+                            <img src="" alt=""
+                                class="event-image w-full h-full object-cover transition-transform duration-500">
+                            <div class="absolute top-4 left-4">
+                                <span
+                                    class="bg-danger text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest animate-pulse-slow">Aujourd'hui
+                                    !</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-primary font-serif mb-3">Culte de Pentecôte 2026</h3>
+                            <div class="space-y-2 mb-6">
+                                <div class="flex items-center gap-2 text-sm text-muted">
+                                    <i class="far fa-calendar-alt w-4 text-accent"></i>
+                                    <span>Dimanche 24 Mai • 09:00</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm text-muted">
+                                    <i class="fas fa-map-marker-alt w-4 text-accent"></i>
+                                    <span>Temple Central EJP</span>
+                                </div>
+                            </div>
+                            <p class="text-muted text-sm mb-6 line-clamp-2 italic">Un moment de communion intense et de
+                                louange pour célébrer la descente de l'Esprit Saint.</p>
+                            <button
+                                class="open-modal-btn w-full py-3 bg-primary text-primary-text font-bold rounded-xl hover:bg-dark transition-colors">En
+                                savoir plus</button>
+                        </div>
+                    </div>
+
+                    <!-- Event 2 -->
+                    <div class="event-card bg-surface rounded-2xl shadow-sm border border-border overflow-hidden transition-all hover:shadow-md animate-fade-in-stagger"
+                        style="animation-delay: 0.2s">
+                        <div class="relative aspect-video overflow-hidden bg-green-900">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-green-900 to-green-700 flex items-center justify-center p-6 text-center">
+                                <div class="border-2 border-accent/30 p-4 rounded-lg">
+                                    <h4 class="text-accent font-serif text-lg leading-tight">RETRAITE SPIRITUELLE</h4>
+                                    <div class="w-12 h-0.5 bg-accent mx-auto mt-2"></div>
+                                </div>
+                            </div>
+                            <div class="absolute top-4 left-4">
+                                <span
+                                    class="bg-primary text-primary-text text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">À
+                                    venir</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-primary font-serif mb-3">Retraite Spirituelle</h3>
+                            <div class="space-y-2 mb-6">
+                                <div class="flex items-center gap-2 text-sm text-muted">
+                                    <i class="far fa-calendar-alt w-4 text-accent"></i>
+                                    <span>12 - 14 Juin 2026</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm text-muted">
+                                    <i class="fas fa-map-marker-alt w-4 text-accent"></i>
+                                    <span>Mont de l'Espoir</span>
+                                </div>
+                            </div>
+                            <p class="text-muted text-sm mb-6 line-clamp-2 italic">Trois jours de jeûne, de prière et
+                                d'enseignement pour approfondir votre foi.</p>
+                            <button
+                                class="open-modal-btn w-full py-3 bg-primary text-primary-text font-bold rounded-xl hover:bg-dark transition-colors">En
+                                savoir plus</button>
+                        </div>
+                    </div>
+
+                    <!-- Event 3 -->
+                    <div class="event-card bg-surface rounded-2xl shadow-sm border border-border overflow-hidden transition-all hover:shadow-md animate-fade-in-stagger"
+                        style="animation-delay: 0.3s">
+                        <div class="relative aspect-video overflow-hidden bg-dark">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-dark to-primary flex items-center justify-center p-6 text-center">
+                                <div class="border-2 border-accent/30 p-4 rounded-lg">
+                                    <h4 class="text-accent font-serif text-lg leading-tight">SOIRÉE DE LOUANGE</h4>
+                                    <div class="w-12 h-0.5 bg-accent mx-auto mt-2"></div>
+                                </div>
+                            </div>
+                            <div class="absolute top-4 left-4">
+                                <span
+                                    class="bg-primary text-primary-text text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">À
+                                    venir</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-primary font-serif mb-3">Soirée de Louange</h3>
+                            <div class="space-y-2 mb-6">
+                                <div class="flex items-center gap-2 text-sm text-muted">
+                                    <i class="far fa-calendar-alt w-4 text-accent"></i>
+                                    <span>Samedi 04 Juillet • 18:00</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-sm text-muted">
+                                    <i class="fas fa-map-marker-alt w-4 text-accent"></i>
+                                    <span>Auditorium EJP</span>
+                                </div>
+                            </div>
+                            <p class="text-muted text-sm mb-6 line-clamp-2 italic">Une soirée inoubliable avec nos
+                                chorales pour célébrer la gloire de Dieu.</p>
+                            <button
+                                class="open-modal-btn w-full py-3 bg-primary text-primary-text font-bold rounded-xl hover:bg-dark transition-colors">En
+                                savoir plus</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Archives Section -->
+                <section>
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="text-2xl font-bold text-primary">Archives</h3>
+                        <div class="flex gap-2">
+                            <select
+                                class="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-muted outline-none">
+                                <option>2026</option>
+                                <option>2025</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-surface rounded-2xl shadow-sm border border-border overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <tbody class="text-sm">
+                                    <tr class="border-b border-border hover:bg-surface transition-colors">
+                                        <td class="p-4 w-12"><i class="fas fa-history text-gray-300"></i></td>
+                                        <td class="py-4 font-bold text-primary">Célébration de Pâques</td>
+                                        <td class="py-4 text-muted italic">12 Avril 2026</td>
+                                        <td class="py-4 text-muted">Temple Central</td>
+                                        <td class="py-4 pr-6 text-right"><button
+                                                class="text-accent font-bold hover:underline">Détails</button></td>
+                                    </tr>
+                                    <tr class="border-b border-border hover:bg-surface transition-colors">
+                                        <td class="p-4 w-12"><i class="fas fa-history text-gray-300"></i></td>
+                                        <td class="py-4 font-bold text-primary">Forum des Jeunes</td>
+                                        <td class="py-4 text-muted italic">28 Mars 2026</td>
+                                        <td class="py-4 text-muted">Salle Polyvalente</td>
+                                        <td class="py-4 pr-6 text-right"><button
+                                                class="text-accent font-bold hover:underline">Détails</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-surface transition-colors">
+                                        <td class="p-4 w-12"><i class="fas fa-history text-gray-300"></i></td>
+                                        <td class="py-4 font-bold text-primary">Journée d'Évangélisation</td>
+                                        <td class="py-4 text-muted italic">15 Février 2026</td>
+                                        <td class="py-4 text-muted">Quartier Nord</td>
+                                        <td class="py-4 pr-6 text-right"><button
+                                                class="text-accent font-bold hover:underline">Détails</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="event-modal" class="fixed inset-0 z-[100] hidden flex items-end justify-center sm:items-center p-4">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div
+            class="relative w-full max-w-2xl bg-surface rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl transform transition-all animate-slide-up-modal">
+            <!-- Modal Header / Image -->
+            <div class="h-64 bg-primary relative">
+                <div id="modal-bg"
+                    class="absolute inset-0 bg-gradient-to-br from-primary to-dark flex items-center justify-center">
+                    <h2 id="modal-title-hero" class="text-accent text-3xl font-serif text-center px-10"></h2>
+                </div>
+                <button id="close-modal"
+                    class="absolute top-4 right-4 w-10 h-10 bg-black/20 hover:bg-black/40 text-white rounded-full flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-8">
+                <div class="flex flex-wrap gap-4 mb-6">
+                    <div class="flex items-center gap-2 bg-surface px-4 py-2 rounded-xl text-sm font-medium text-muted">
+                        <i class="far fa-calendar-alt text-accent"></i>
+                        <span id="modal-date"></span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-surface px-4 py-2 rounded-xl text-sm font-medium text-muted">
+                        <i class="fas fa-map-marker-alt text-accent"></i>
+                        <span id="modal-location"></span>
+                    </div>
+                </div>
+
+                <h3 id="modal-title" class="text-2xl font-bold text-primary font-serif mb-4"></h3>
+                <p id="modal-description" class="text-muted leading-relaxed mb-8"></p>
+
+                <div class="flex gap-4">
+                    <button
+                        class="flex-1 py-4 bg-primary text-primary-text font-bold rounded-2xl hover:bg-dark transition-colors">S'inscrire</button>
+                    <button id="share-btn"
+                        class="w-16 h-16 flex items-center justify-center border-2 border-border rounded-2xl hover:bg-surface text-primary transition-colors">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Sidebar
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+        mobileMenuBtn?.addEventListener('click', toggleSidebar);
+        sidebarOverlay?.addEventListener('click', toggleSidebar);
+
+        // Modal Logic
+        const modal = document.getElementById('event-modal');
+        const closeModal = document.getElementById('close-modal');
+        const openModalBtns = document.querySelectorAll('.open-modal-btn');
+        const modalTitleHero = document.getElementById('modal-title-hero');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDate = document.getElementById('modal-date');
+        const modalLocation = document.getElementById('modal-location');
+        const modalDescription = document.getElementById('modal-description');
+        const modalBg = document.getElementById('modal-bg');
+
+        const bgs = {
+            'Culte de Pentecôte 2026': 'linear-gradient(to bottom right, #1E3A5F, #2A4A7F)',
+            'Retraite Spirituelle': 'linear-gradient(to bottom right, #14532d, #166534)',
+            'Soirée de Louange': 'linear-gradient(to bottom right, #0F1B2D, #1E3A5F)'
+        };
+
+        openModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const card = btn.closest('.event-card');
+                const title = card.querySelector('h3').textContent;
+                const date = card.querySelector('.fa-calendar-alt').nextElementSibling.textContent;
+                const location = card.querySelector('.fa-map-marker-alt').nextElementSibling.textContent;
+                const description = card.querySelector('p').textContent;
+
+                modalTitleHero.textContent = title.toUpperCase();
+                modalTitle.textContent = title;
+                modalDate.textContent = date;
+                modalLocation.textContent = location;
+                modalDescription.textContent = description;
+                modalBg.style.background = bgs[title] || bgs['Culte de Pentecôte 2026'];
+
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            });
+        });
+
+        function handleCloseModal() {
+            modal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        closeModal.addEventListener('click', handleCloseModal);
+        document.querySelector('.modal-overlay').addEventListener('click', handleCloseModal);
+
+        // Share simulation
+        document.getElementById('share-btn').addEventListener('click', () => {
+            // Copy URL to clipboard
+            navigator.clipboard.writeText(window.location.href).catch(() => { });
+
+            // Show custom toast notification
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 3000);
+            }
+        });
+    </script>
+
+    <!-- Success Toast -->
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] hidden">
+        <div
+            class="bg-primary text-primary-text px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-accent/30 transition-all">
+            <i class="fas fa-check-circle text-accent text-xl"></i>
+            <span class="font-medium text-sm">Lien de l'événement copié dans le presse-papiers !</span>
+        </div>
+    </div>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()"
+        class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+
+</html>

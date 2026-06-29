@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte | EJP - Église des Jeunes Prodiges</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+
+        .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'toast-in': 'toastIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards',
+                        'border-dance': 'borderDance 2s linear infinite',
+                    },
+                    keyframes: {
+                        toastIn: {
+                            '0%': { transform: 'translateY(-100%)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        borderDance: {
+                            '0%': { strokeDashoffset: '0' },
+                            '100%': { strokeDashoffset: '20' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .sidebar-link.active {
+            background-color: #F5A623;
+            color: #1E3A5F;
+        }
+
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #1E3A5F;
+        }
+
+        .sidebar-link:not(.active):hover {
+            background-color: rgba(245, 166, 35, 0.1);
+            color: #F5A623;
+        }
+
+        .toggle-switch {
+            width: 48px;
+            height: 24px;
+            background-color: #e2e8f0;
+            border-radius: 999px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: left 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active {
+            background-color: #F5A623;
+        }
+
+        .toggle-switch.active::after {
+            left: calc(100% - 22px);
+        }
+
+        .strength-bar {
+            height: 4px;
+            border-radius: 2px;
+            transition: all 0.3s;
+            width: 0%;
+        }
+
+        input:read-only {
+            background-color: transparent;
+            border-color: transparent;
+            cursor: default;
+        }
+
+        input:read-only:focus {
+            box-shadow: none;
+        }
+
+        .dashed-border {
+            stroke-dasharray: 10;
+            animation: border-dance 1s linear infinite;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-surface font-sans text-text overflow-hidden">
+
+    <!-- Success Toast -->
+    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] hidden">
+        <div
+            class="bg-primary text-primary-text px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-accent/30 animate-toast-in">
+            <div class="w-10 h-10 bg-success rounded-full flex items-center justify-center text-white">
+                <i class="fas fa-check"></i>
+            </div>
+            <div>
+                <p class="font-bold">Modifications enregistrées</p>
+                <p class="text-xs text-white/60">Votre profil a été mis à jour avec succès.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Sidebar (Reused) -->
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-[260px] bg-dark text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+            <div class="flex flex-col h-full">
+                <div class="p-6 flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center border border-accent">
+                        <span class="text-accent font-serif font-bold">EJP</span>
+                    </div>
+
+                </div>
+                <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
+                    <a href="dashboard.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-home w-5"></i>
+                        <span class="font-medium">Tableau de bord</span>
+                    </a>
+                    <a href="formations.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-graduation-cap w-5"></i>
+                        <span class="font-medium">Mes formations</span>
+                    </a>
+                    <a href="progression.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-chart-line w-5"></i>
+                        <span class="font-medium">Ma progression</span>
+                    </a>
+                    <a href="evenements.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-calendar-alt w-5"></i>
+                        <span class="font-medium">Événements</span>
+                    </a>
+                    <a href="notifications.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-bell w-5"></i>
+                        <span class="font-medium">Notifications</span>
+                    </a>
+                    <a href="compte.html"
+                        class="sidebar-link active relative flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                        <i class="fas fa-cog w-5"></i>
+                        <span class="font-medium">Mon compte</span>
+                    </a>
+                </nav>
+                <div class="p-4 border-t border-border space-y-1">
+                    <a href="index.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-globe w-5"></i>
+                        <span class="font-medium">Retour à l'accueil</span>
+                    </a>
+                    <a href="login.html"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-danger hover:bg-danger/10">
+                        <i class="fas fa-door-open w-5"></i>
+                        <span class="font-medium">Déconnexion</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col lg:ml-[260px] h-screen overflow-hidden">
+
+            <!-- Top Header -->
+            <header
+                class="sticky top-0 z-30 bg-surface border-b border-border px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" class="lg:hidden text-primary text-2xl"><i
+                            class="fas fa-bars"></i></button>
+                    <h2 class="text-xl font-bold text-primary"><i class="fas fa-cog text-accent"></i> Mon Compte</h2>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-primary font-bold">
+                        JK</div>
+                </div>
+            </header>
+
+            <!-- Scrollable Body -->
+            <div class="flex-1 overflow-y-auto p-6 custom-scrollbar space-y-8">
+
+                <!-- Section 1: Personal Info -->
+                <section class="bg-surface rounded-3xl p-8 shadow-sm border border-border">
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="text-xl font-bold text-primary">Informations personnelles</h3>
+                        <button id="edit-btn" class="text-accent font-bold hover:underline">Modifier</button>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-12">
+                        <!-- Avatar Column -->
+                        <div class="flex flex-col items-center">
+                            <div class="relative group cursor-pointer">
+                                <div
+                                    class="w-32 h-32 rounded-full bg-accent flex items-center justify-center text-primary text-4xl font-bold border-4 border-white shadow-lg overflow-hidden">
+                                    JK
+                                    <div
+                                        class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                        <i class="fas fa-camera text-white"></i>
+                                    </div>
+                                </div>
+                                <!-- Dancing border SVG for upload feedback (simulated) -->
+                                <svg class="absolute inset-[-6px] w-[144px] h-[144px] hidden group-hover:block"
+                                    viewBox="0 0 144 144">
+                                    <circle cx="72" cy="72" r="70" fill="none" stroke="#F5A623" stroke-width="2"
+                                        class="dashed-border"></circle>
+                                </svg>
+                            </div>
+                            <p class="mt-4 text-xs text-muted font-medium">JPG, PNG max 2MB</p>
+                        </div>
+
+                        <!-- Form Column -->
+                        <form id="profile-form" class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-muted uppercase tracking-wider">Nom</label>
+                                <input type="text" value="Kodjo" readonly
+                                    class="w-full py-2 px-0 border-b border-border text-primary font-medium focus:border-accent focus:outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-muted uppercase tracking-wider">Prénom</label>
+                                <input type="text" value="Jean" readonly
+                                    class="w-full py-2 px-0 border-b border-border text-primary font-medium focus:border-accent focus:outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-muted uppercase tracking-wider">Téléphone</label>
+                                <input type="text" value="+225 01 02 03 04 05" readonly
+                                    class="w-full py-2 px-0 border-b border-border text-primary font-medium focus:border-accent focus:outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-muted uppercase tracking-wider">E-mail</label>
+                                <input type="email" value="jean.kodjo@ejp.ci" readonly
+                                    class="w-full py-2 px-0 border-b border-border text-primary font-medium focus:border-accent focus:outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-muted uppercase tracking-wider">Date
+                                    d'arrivée</label>
+                                <input type="text" value="15 Janvier 2026" readonly
+                                    class="w-full py-2 px-0 text-muted font-medium bg-transparent">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-muted uppercase tracking-wider">Chef
+                                    responsable</label>
+                                <input type="text" value="Chef Amos" readonly
+                                    class="w-full py-2 px-0 text-muted font-medium bg-transparent">
+                            </div>
+                            <div class="md:col-span-2 pt-4">
+                                <button type="submit" id="save-btn"
+                                    class="hidden bg-accent text-primary font-bold px-8 py-3 rounded-xl hover:scale-105 transition-transform shadow-lg shadow-accent/20">Enregistrer
+                                    les modifications</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Section 2: Security -->
+                <section class="bg-surface rounded-3xl p-8 shadow-sm border border-border">
+                    <h3 class="text-xl font-bold text-primary mb-8">Sécurité</h3>
+
+                    <form class="max-w-md space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-muted uppercase">Ancien mot de passe</label>
+                            <input type="password" placeholder="••••••••"
+                                class="w-full bg-surface border border-border rounded-xl py-3 px-4 focus:border-accent focus:outline-none">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-muted uppercase">Nouveau mot de passe</label>
+                            <input type="password" id="new-password" placeholder="••••••••"
+                                class="w-full bg-surface border border-border rounded-xl py-3 px-4 focus:border-accent focus:outline-none">
+                            <!-- Strength Meter -->
+                            <div class="w-full h-1 bg-surface rounded-full overflow-hidden mt-2">
+                                <div id="strength-meter" class="strength-bar bg-danger"></div>
+                            </div>
+                            <p id="strength-text" class="text-[10px] font-bold text-muted uppercase">Trop faible</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-muted uppercase">Confirmer le nouveau mot de
+                                passe</label>
+                            <input type="password" placeholder="••••••••"
+                                class="w-full bg-surface border border-border rounded-xl py-3 px-4 focus:border-accent focus:outline-none">
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-4 bg-primary text-primary-text font-bold rounded-2xl hover:bg-dark transition-colors">Mettre
+                            à jour le mot de passe</button>
+                    </form>
+                </section>
+
+                <!-- Section 3: Notifications -->
+                <section class="bg-surface rounded-3xl p-8 shadow-sm border border-border">
+                    <h3 class="text-xl font-bold text-primary mb-8">Préférences de notifications</h3>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-bold text-primary">Rappels d'événements</p>
+                                <p class="text-sm text-muted">Recevoir des notifications avant le début d'un culte ou
+                                    événement.</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-bold text-primary">Demandes de progression</p>
+                                <p class="text-sm text-muted">Être notifié quand ma demande est traitée par un Chef ou
+                                    l'Admin.</p>
+                            </div>
+                            <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-bold text-primary">Newsletter EJP</p>
+                                <p class="text-sm text-muted">Recevoir les actualités hebdomadaires de l'église.</p>
+                            </div>
+                            <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile Sidebar
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        function toggleSidebar() { sidebar.classList.toggle('-translate-x-full'); sidebarOverlay.classList.toggle('hidden'); }
+        mobileMenuBtn?.addEventListener('click', toggleSidebar);
+        sidebarOverlay?.addEventListener('click', toggleSidebar);
+
+        // Edit Profile Logic
+        const editBtn = document.getElementById('edit-btn');
+        const saveBtn = document.getElementById('save-btn');
+        const profileInputs = document.querySelectorAll('#profile-form input:not([readonly*="true"])'); // Simplified selector for demo
+
+        editBtn.addEventListener('click', () => {
+            const isEditing = editBtn.textContent === 'Annuler';
+            if (isEditing) {
+                editBtn.textContent = 'Modifier';
+                saveBtn.classList.add('hidden');
+                document.querySelectorAll('#profile-form input').forEach((input, index) => {
+                    if (index < 4) { // Only first 4 fields are editable
+                        input.setAttribute('readonly', 'true');
+                    }
+                });
+            } else {
+                editBtn.textContent = 'Annuler';
+                saveBtn.classList.remove('hidden');
+                document.querySelectorAll('#profile-form input').forEach((input, index) => {
+                    if (index < 4) {
+                        input.removeAttribute('readonly');
+                        if (index === 0) input.focus();
+                    }
+                });
+            }
+        });
+
+        // Form Submit Simulation
+        document.getElementById('profile-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Success Logic
+            editBtn.click(); // Switch back to read mode
+            showToast();
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#F5A623', '#1E3A5F']
+            });
+        });
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('hidden');
+            setTimeout(() => { toast.classList.add('hidden'); }, 4000);
+        }
+
+        // Password Strength Logic
+        const pwInput = document.getElementById('new-password');
+        const strengthMeter = document.getElementById('strength-meter');
+        const strengthText = document.getElementById('strength-text');
+
+        pwInput.addEventListener('input', () => {
+            const val = pwInput.value;
+            let strength = 0;
+            if (val.length > 5) strength += 33;
+            if (val.match(/[A-Z]/)) strength += 33;
+            if (val.match(/[0-9]/)) strength += 34;
+
+            strengthMeter.style.width = strength + '%';
+
+            if (strength < 40) {
+                strengthMeter.style.backgroundColor = '#E74C3C';
+                strengthText.textContent = 'Trop faible';
+                strengthText.style.color = '#E74C3C';
+            } else if (strength < 80) {
+                strengthMeter.style.backgroundColor = '#F5A623';
+                strengthText.textContent = 'Moyen';
+                strengthText.style.color = '#F5A623';
+            } else {
+                strengthMeter.style.backgroundColor = '#27AE60';
+                strengthText.textContent = 'Fort';
+                strengthText.style.color = '#27AE60';
+            }
+        });
+    </script>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()"
+        class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+
+</html>

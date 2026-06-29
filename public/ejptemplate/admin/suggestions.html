@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suggestions | EJP Admin</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+        .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+        @font-face { font-family: 'FuturaStd'; src: url('fonts/FuturaStdBook.otf') format('opentype'); font-weight: 400; font-style: normal; }
+        @font-face { font-family: 'FuturaStd'; src: url('fonts/FuturaStdMedium.otf') format('opentype'); font-weight: 500; font-style: normal; }
+        @font-face { font-family: 'FuturaStd'; src: url('fonts/FuturaStdHeavy.otf') format('opentype'); font-weight: 600; font-style: normal; }
+        @font-face { font-family: 'FuturaStd'; src: url('fonts/FuturaStdBold.otf') format('opentype'); font-weight: 700; font-style: normal; }
+        @font-face { font-family: 'FuturaStd'; src: url('fonts/FuturaStdExtraBold.otf') format('opentype'); font-weight: 800; font-style: normal; }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: { sans: ['FuturaStd', 'sans-serif'], serif: ['FuturaStd', 'sans-serif'], },
+                }
+            }
+        }
+    </script>
+    <style>
+        .sidebar-link.active { background-color: rgba(245, 166, 35, 0.1); color: #F5A623; border-right: 4px solid #F5A623; }
+        .sidebar-link:not(.active):hover { background-color: rgba(255, 255, 255, 0.05); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+    </style>
+    <script>
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+    </script>
+</head>
+
+<body class="bg-bg font-sans text-text overflow-hidden">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-[280px] bg-surface border-r border-border flex flex-col h-full z-50 shrink-0">
+            <div class="p-8 flex items-center gap-4">
+                <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center border border-accent">
+                    <span class="text-accent font-serif font-bold text-xl">EJP</span>
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-lg leading-tight">Admin Panel</h1>
+                    <p class="text-[10px] text-muted uppercase tracking-widest">Back-Office</p>
+                </div>
+            </div>
+            <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+                <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-chart-pie w-5"></i><span class="font-medium">Tableau de bord</span>
+                </a>
+                <a href="membres.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-users w-5"></i><span class="font-medium">Membres</span>
+                </a>
+                <a href="chefs.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-user-tie w-5"></i><span class="font-medium">Chefs & Groupes</span>
+                </a>
+                <a href="formations.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-graduation-cap w-5"></i><span class="font-medium">Formations</span>
+                </a>
+                <a href="cultes.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-church w-5"></i><span class="font-medium">Cultes</span>
+                </a>
+                <a href="reunions.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-file-alt w-5"></i><span class="font-medium">PV Réunions</span>
+                </a>
+                <a href="evenements.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-calendar-check w-5"></i><span class="font-medium">Événements</span>
+                </a>
+                <a href="communications.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-paper-plane w-5"></i><span class="font-medium">Communications</span>
+                </a>
+                <a href="suggestions.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                    <i class="fas fa-lightbulb w-5"></i><span class="font-medium">Suggestions</span>
+                </a>
+                <a href="parametres.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-sliders-h w-5"></i><span class="font-medium">Paramètres</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-border">
+                <a href="login.html" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-danger hover:bg-danger/10">
+                    <i class="fas fa-sign-out-alt w-5"></i><span class="font-medium">Déconnexion</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden">
+            <!-- Top Navbar -->
+            <header class="h-20 bg-surface border-b border-border flex items-center justify-between px-8 shrink-0">
+                <h2 class="text-xl font-bold text-primary">Boîte à Suggestions</h2>
+                <div class="flex items-center gap-6">
+                    <div class="relative hidden lg:block">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-muted"></i>
+                        <input type="text" placeholder="Rechercher une idée..." class="bg-bg border-none rounded-xl py-2.5 pl-12 pr-4 w-64 text-sm focus:ring-2 focus:ring-accent/20 text-text">
+                    </div>
+                    <button class="w-10 h-10 bg-bg rounded-xl flex items-center justify-center text-muted relative">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-2 right-2 w-2 h-2 bg-danger rounded-full border-2 border-bg"></span>
+                    </button>
+                    <div class="flex items-center gap-3 ml-4">
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-primary">Admin EJP</p>
+                            <p class="text-[10px] text-danger font-bold uppercase tracking-widest">Super Utilisateur</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-accent font-bold">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                
+                <!-- Filters -->
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                    <div class="flex gap-2">
+                        <button class="px-5 py-2.5 rounded-lg bg-primary text-primary-text font-bold text-sm border border-primary">Toutes (12)</button>
+                        <button class="px-5 py-2.5 rounded-lg bg-surface text-muted hover:text-primary transition-colors text-sm border border-border">Pour l'EJP (8)</button>
+                        <button class="px-5 py-2.5 rounded-lg bg-surface text-muted hover:text-primary transition-colors text-sm border border-border">Pour la Plateforme (4)</button>
+                    </div>
+                    <div class="flex gap-2">
+                        <select class="bg-surface border border-border rounded-lg px-4 py-2 text-sm text-text focus:outline-none focus:border-accent">
+                            <option>Trier par : Plus récentes</option>
+                            <option>Trier par : Plus anciennes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Suggestions Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Suggestion Card 1 -->
+                    <div class="bg-surface p-6 rounded-2xl border border-border hover:border-accent/30 transition-colors shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <span class="inline-block px-3 py-1 bg-accent/10 text-accent rounded-full text-[10px] font-bold uppercase tracking-wider mb-2">Plateforme Web</span>
+                                <h3 class="font-bold text-primary text-lg">Ajouter un mode hors-ligne pour les vidéos</h3>
+                            </div>
+                            <span class="text-xs text-muted">Il y a 2h</span>
+                        </div>
+                        <p class="text-sm text-muted mb-6 leading-relaxed">
+                            Ce serait génial de pouvoir télécharger les vidéos de formation pour les regarder sans connexion internet, surtout quand on se déplace beaucoup ou que la connexion est instable.
+                        </p>
+                        <div class="flex items-center justify-between pt-4 border-t border-border">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">A</div>
+                                <span class="text-sm font-medium text-primary">Anonyme</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="p-2 text-success hover:bg-success/10 rounded-lg transition-colors"><i class="fas fa-check"></i> Lu</button>
+                                <button class="p-2 text-danger hover:bg-danger/10 rounded-lg transition-colors"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Suggestion Card 2 -->
+                    <div class="bg-surface p-6 rounded-2xl border border-border hover:border-accent/30 transition-colors shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <span class="inline-block px-3 py-1 bg-purple-500/10 text-purple-500 rounded-full text-[10px] font-bold uppercase tracking-wider mb-2">Église EJP</span>
+                                <h3 class="font-bold text-primary text-lg">Plus de retraites pour les jeunes</h3>
+                            </div>
+                            <span class="text-xs text-muted">Hier</span>
+                        </div>
+                        <p class="text-sm text-muted mb-6 leading-relaxed">
+                            J'aimerais suggérer qu'on organise des retraites spirituelles de week-end plus souvent, peut-être une fois par trimestre, pour renforcer la cohésion des groupes de maison.
+                        </p>
+                        <div class="flex items-center justify-between pt-4 border-t border-border">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-primary text-accent flex items-center justify-center text-xs font-bold">MK</div>
+                                <span class="text-sm font-medium text-primary">Marie Koné</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="p-2 text-success hover:bg-success/10 rounded-lg transition-colors"><i class="fas fa-check"></i> Lu</button>
+                                <button class="p-2 text-danger hover:bg-danger/10 rounded-lg transition-colors"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Suggestion Card 3 -->
+                    <div class="bg-surface p-6 rounded-2xl border border-border hover:border-accent/30 transition-colors shadow-sm opacity-60">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <span class="inline-block px-3 py-1 bg-accent/10 text-accent rounded-full text-[10px] font-bold uppercase tracking-wider mb-2">Plateforme Web</span>
+                                <h3 class="font-bold text-primary text-lg">Notifications par SMS</h3>
+                            </div>
+                            <span class="text-xs text-muted">3 Mai 2026</span>
+                        </div>
+                        <p class="text-sm text-muted mb-6 leading-relaxed">
+                            Pouvez-vous ajouter une option pour recevoir les rappels d'événements par SMS au lieu de seulement par email ?
+                        </p>
+                        <div class="flex items-center justify-between pt-4 border-t border-border">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">A</div>
+                                <span class="text-sm font-medium text-primary">Anonyme</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="text-xs font-bold text-success flex items-center gap-1"><i class="fas fa-check-double"></i> Traité</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()" class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+</html>

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord | EJP - Église des Jeunes Prodiges</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+
+        .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'slide-in-left': 'slideInLeft 0.5s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.5s ease-out forwards',
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'pulse-soft': 'pulseSoft 2s infinite',
+                    },
+                    keyframes: {
+                        slideInLeft: {
+                            '0%': { transform: 'translateX(-30px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(30px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        fadeInUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        pulseSoft: {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+                            '50%': { transform: 'scale(1.05)', opacity: '0.8' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .sidebar-link.active {
+            background-color: #F5A623;
+            color: #1E3A5F;
+        }
+
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #1E3A5F;
+        }
+
+        .sidebar-link:not(.active):hover {
+            background-color: rgba(245, 166, 35, 0.1);
+            color: #F5A623;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-surface font-sans text-text overflow-hidden">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-[260px] bg-dark text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+            <div class="flex flex-col h-full">
+                <!-- Logo -->
+                <div class="p-6 flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center border border-accent">
+                        <span class="text-accent font-serif font-bold">EJP</span>
+                    </div>
+
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
+                    <a href="dashboard.html"
+                        class="sidebar-link active relative flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                        <i class="fas fa-home w-5"></i>
+                        <span class="font-medium">Tableau de bord</span>
+                    </a>
+                    <a href="formations.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-graduation-cap w-5"></i>
+                        <span class="font-medium">Mes formations</span>
+                    </a>
+                    <a href="progression.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-chart-line w-5"></i>
+                        <span class="font-medium">Ma progression</span>
+                    </a>
+                    <a href="evenements.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-calendar-alt w-5"></i>
+                        <span class="font-medium">Événements</span>
+                    </a>
+                    <a href="notifications.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-bell w-5"></i>
+                        <span class="font-medium">Notifications</span>
+                    </a>
+                    <a href="compte.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-cog w-5"></i>
+                        <span class="font-medium">Mon compte</span>
+                    </a>
+                </nav>
+                <div class="p-4 border-t border-border space-y-1">
+                    <a href="index.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-globe w-5"></i>
+                        <span class="font-medium">Retour à l'accueil</span>
+                    </a>
+                    <a href="login.html"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-danger hover:bg-danger/10">
+                        <i class="fas fa-door-open w-5"></i>
+                        <span class="font-medium">Déconnexion</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Overlay for mobile sidebar -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col lg:ml-[260px] h-screen overflow-hidden">
+
+            <!-- Top Header -->
+            <header
+                class="sticky top-0 z-30 bg-surface border-b border-border px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" class="lg:hidden text-primary text-2xl">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 class="text-xl font-bold text-primary hidden md:block">Tableau de bord</h2>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <!-- Notifications -->
+                    <button class="relative text-muted hover:text-primary transition-colors">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span
+                            class="absolute -top-1 -right-1 w-4 h-4 bg-danger text-white text-[10px] flex items-center justify-center rounded-full border-2 border-white">3</span>
+                    </button>
+
+                    <!-- Profile -->
+                    <div class="flex items-center gap-3 border-l border-border pl-6">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-bold text-primary">Jean Kodjo</p>
+                            <p class="text-[10px] font-semibold text-accent uppercase tracking-wider">Statut : Star <i
+                                    class="fas fa-star text-accent ml-0.5 animate-pulse-soft"></i></p>
+                        </div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-primary font-bold shadow-sm">
+                            JK
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Body -->
+            <div class="flex-1 overflow-y-auto p-6 custom-scrollbar space-y-8">
+
+                <!-- Hero Section -->
+                <section class="animate-slide-in-left">
+                    <div
+                        class="bg-white dark:bg-black border border-border dark:border-white/10 rounded-3xl p-8 text-text relative overflow-hidden shadow-sm dark:shadow-none">
+                        <!-- Abstract Background Decoration -->
+                        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-accent/10 rounded-full blur-3xl">
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 -ml-20 -mb-20 w-60 h-60 bg-blue-400/5 rounded-full blur-3xl">
+                        </div>
+
+                        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div class="text-center md:text-left">
+                                <h1 class="text-4xl font-serif mb-2 text-primary">Bonjour, Jean <i
+                                        class="fas fa-hand-sparkles text-accent"></i></h1>
+                                <div class="flex items-center justify-center md:justify-start gap-3 mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 px-3 py-1 rounded-full text-accent text-sm font-bold">
+                                        <i class="fas fa-star animate-pulse-soft"></i>
+                                        Statut : Star
+                                    </span>
+                                    <span class="text-muted text-sm">Membre depuis le 15 janvier 2026</span>
+                                </div>
+                                <p class="text-muted max-w-lg leading-relaxed">
+                                    Continuez votre excellent travail ! Vous êtes à quelques étapes seulement de devenir
+                                    <strong class="text-primary font-bold">Pilote <i
+                                            class="fas fa-plane text-accent ml-1"></i></strong>.
+                                </p>
+                            </div>
+
+                            <div class="hidden lg:block">
+                                <!-- CSS Star Illustration -->
+                                <div class="relative w-32 h-32 flex items-center justify-center">
+                                    <div class="absolute inset-0 bg-accent/10 rounded-full animate-pulse-soft"></div>
+                                    <i
+                                        class="fas fa-star text-6xl text-accent drop-shadow-[0_0_15px_rgba(245,166,35,0.6)]"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Stats Grid -->
+                <section class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Stat Card 1 -->
+                    <div class="bg-surface p-6 rounded-2xl shadow-sm border border-border card-hover animate-fade-in-up"
+                        style="animation-delay: 0.1s">
+                        <div
+                            class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 mb-4">
+                            <i class="fas fa-video text-xl"></i>
+                        </div>
+                        <p class="text-muted text-sm font-medium">Formations</p>
+                        <h3 class="text-2xl font-bold text-primary">7/10</h3>
+                        <p class="text-[10px] text-success font-bold mt-1">70% complété</p>
+                    </div>
+
+                    <!-- Stat Card 2 -->
+                    <div class="bg-surface p-6 rounded-2xl shadow-sm border border-border card-hover animate-fade-in-up"
+                        style="animation-delay: 0.2s">
+                        <div
+                            class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-green-600 mb-4">
+                            <i class="fas fa-check-circle text-xl"></i>
+                        </div>
+                        <p class="text-muted text-sm font-medium">Services</p>
+                        <h3 class="text-2xl font-bold text-primary">8 sessions</h3>
+                        <p class="text-[10px] text-muted font-bold mt-1">Besoin : 12 pour Pilote</p>
+                    </div>
+
+                    <!-- Stat Card 3 -->
+                    <div class="bg-surface p-6 rounded-2xl shadow-sm border border-border card-hover animate-fade-in-up"
+                        style="animation-delay: 0.3s">
+                        <div
+                            class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 mb-4">
+                            <i class="fas fa-calendar-check text-xl"></i>
+                        </div>
+                        <p class="text-muted text-sm font-medium">Ancienneté</p>
+                        <h3 class="text-2xl font-bold text-primary">3 mois</h3>
+                        <p class="text-[10px] text-muted font-bold mt-1">EJP Template</p>
+                    </div>
+
+                    <!-- Stat Card 4 -->
+                    <div class="bg-surface p-6 rounded-2xl shadow-sm border border-border card-hover animate-fade-in-up"
+                        style="animation-delay: 0.4s">
+                        <div
+                            class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 mb-4">
+                            <i class="fas fa-trophy text-xl"></i>
+                        </div>
+                        <p class="text-muted text-sm font-medium">Niveau</p>
+                        <h3 class="text-2xl font-bold text-primary">Star</h3>
+                        <p class="text-[10px] text-accent font-bold mt-1">Prochain : Pilote</p>
+                    </div>
+                </section>
+
+                <div class="grid lg:grid-cols-3 gap-8">
+
+                    <!-- Progression & Formations -->
+                    <div class="lg:col-span-2 space-y-8">
+                        <div class="bg-surface p-8 rounded-3xl shadow-sm border border-border">
+                            <div class="flex items-center justify-between mb-8">
+                                <h3 class="text-xl font-bold text-primary">Ma progression dans les formations</h3>
+                                <a href="formations.html" class="text-accent text-sm font-bold hover:underline">Voir
+                                    tout →</a>
+                            </div>
+
+                            <!-- Progress Bar -->
+                            <div class="mb-10">
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-sm font-medium text-muted">Global</span>
+                                    <span class="text-sm font-bold text-primary">70%</span>
+                                </div>
+                                <div class="w-full h-3 bg-surface rounded-full overflow-hidden">
+                                    <div class="h-full bg-accent rounded-full transition-all duration-1000 ease-out"
+                                        style="width: 70%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Modules List -->
+                            <div class="space-y-4">
+                                <div
+                                    class="flex items-center justify-between p-4 bg-surface rounded-xl border border-border hover:border-accent/30 transition-colors">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 bg-success/10 text-success rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-primary">Les Fondements de la Foi</p>
+                                            <p class="text-xs text-muted">Module obligatoire</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-bold text-success">Complété</span>
+                                </div>
+
+                                <div
+                                    class="flex items-center justify-between p-4 bg-surface rounded-xl border border-border hover:border-accent/30 transition-colors">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 bg-amber-500/10 text-amber-500 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-sync animate-spin" style="animation-duration: 3s"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-primary">Vie Communautaire</p>
+                                            <p class="text-xs text-muted">Module obligatoire</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-bold text-amber-500">En cours</span>
+                                </div>
+
+                                <div
+                                    class="flex items-center justify-between p-4 bg-surface rounded-xl border border-border group opacity-60">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 bg-gray-200 text-muted rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-lock"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-primary">Développement Personnel</p>
+                                            <p class="text-xs text-muted">Module optionnel</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-bold text-muted">Verrouillé</span>
+                                </div>
+                            </div>
+
+                            <!-- CTA Button -->
+                            <div class="mt-10">
+                                <button
+                                    class="w-full bg-gray-200 text-muted font-bold py-4 rounded-2xl cursor-not-allowed group relative"
+                                    disabled>
+                                    Faire une demande de progression vers Pilote
+                                    <div
+                                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-dark text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                        Complétez 100% des formations obligatoires et 12 sessions de service.
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Feed: Notifications -->
+                    <div class="space-y-8">
+                        <div class="bg-surface p-8 rounded-3xl shadow-sm border border-border h-full">
+                            <div class="flex items-center justify-between mb-8">
+                                <h3 class="text-xl font-bold text-primary">Notifications</h3>
+                                <button class="text-primary/40 hover:text-primary"><i
+                                        class="fas fa-ellipsis-h"></i></button>
+                            </div>
+
+                            <div class="space-y-6">
+                                <!-- Notif 1 -->
+                                <div class="flex gap-4 animate-slide-in-right" style="animation-delay: 0.5s">
+                                    <div
+                                        class="w-10 h-10 shrink-0 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-primary">Nouvel événement ajouté</p>
+                                        <p class="text-xs text-muted mt-1">Culte de Pentecôte 2026 - Inscrivez-vous !
+                                        </p>
+                                        <p class="text-[10px] text-muted mt-2">Il y a 2 heures</p>
+                                    </div>
+                                </div>
+
+                                <!-- Notif 2 -->
+                                <div class="flex gap-4 animate-slide-in-right" style="animation-delay: 0.6s">
+                                    <div
+                                        class="w-10 h-10 shrink-0 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-primary">Session de service validée</p>
+                                        <p class="text-xs text-muted mt-1">Votre session du 12/05 a été approuvée par
+                                            Chef Amos.</p>
+                                        <p class="text-[10px] text-muted mt-2">Hier, 18:30</p>
+                                    </div>
+                                </div>
+
+                                <!-- Notif 3 -->
+                                <div class="flex gap-4 animate-slide-in-right" style="animation-delay: 0.7s">
+                                    <div
+                                        class="w-10 h-10 shrink-0 bg-accent/20 text-accent rounded-full flex items-center justify-center">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-primary">Nouveau module disponible</p>
+                                        <p class="text-xs text-muted mt-1">"Leadership Spirituel" est désormais
+                                            accessible.</p>
+                                        <p class="text-[10px] text-muted mt-2">12 mai 2026</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button
+                                class="w-full mt-8 py-3 text-sm font-bold text-primary hover:bg-surface rounded-xl border border-border transition-colors">
+                                Tout marquer comme lu
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile Sidebar Logic
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        mobileMenuBtn?.addEventListener('click', toggleSidebar);
+        sidebarOverlay?.addEventListener('click', toggleSidebar);
+
+        // Sidebar link active state (simulation)
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                // If it's the logout link, don't prevent default
+                if (link.getAttribute('href') === 'login.html') return;
+
+                // For demo purposes, we stay on the same page unless we'll create the others
+                // sidebarLinks.forEach(l => l.classList.remove('active', 'text-muted'));
+                // link.classList.add('active');
+                // link.classList.remove('text-muted');
+            });
+        });
+
+        // Close sidebar on resize if desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.add('-translate-x-full'); // Reset mobile state
+                sidebar.classList.remove('-translate-x-full'); // Force desktop state via Tailwind lg:translate-x-0
+                sidebarOverlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+    </script>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()"
+        class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+
+</html>

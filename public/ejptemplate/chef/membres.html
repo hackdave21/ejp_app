@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Famille | EJP Chef</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+                .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { transform: 'translateY(15px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(100%)' },
+                            '100%': { transform: 'translateX(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .sidebar-link.active { background-color: rgba(17, 94, 89, 0.1); color: #115E59; border-right: 4px solid #115E59; }
+        .sidebar-link:not(.active):hover { background-color: rgba(0, 0, 0, 0.02); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        /* Level badge dark mode fix */
+        .badge-star  { background-color: rgba(245,166,35,0.12); color: #F5A623; border: 1px solid rgba(245,166,35,0.3); }
+        .badge-pilot { background-color: rgba(59,130,246,0.12); color: #3B82F6; border: 1px solid rgba(59,130,246,0.3); }
+        .badge-new   { background-color: rgba(156,163,175,0.12); color: #9CA3AF; border: 1px solid rgba(156,163,175,0.25); }
+
+        /* Table row divider */
+        .dark .divide-gray-50 > :not(:first-child) { border-top-color: #1F2937; }
+
+        /* Drawer contact buttons */
+        .dark .drawer-btn-wa { background-color: rgba(39,174,96,0.15); color: #27AE60; }
+        .dark .drawer-btn-wa:hover { background-color: #27AE60; color: white; }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+        
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-bg font-sans text-text overflow-hidden">
+    
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar Chef -->
+        <aside class="w-[280px] bg-surface border-r border-border flex flex-col h-full z-50 shrink-0">
+            <div class="p-8 flex items-center gap-4">
+                <div class="w-12 h-12 bg-chef rounded-xl flex items-center justify-center border border-white shadow-md">
+                    <span class="text-white font-serif font-bold text-xl">EJP</span>
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-lg leading-tight text-primary">Portail Chef</h1>
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-chef">Responsable Famille</p>
+                </div>
+            </div>
+            
+            <div class="px-8 pb-4">
+                <div class="flex items-center gap-3 bg-surface p-3 rounded-xl border border-border">
+                    <div class="w-10 h-10 rounded-full bg-primary text-primary-text flex items-center justify-center font-bold text-sm">AM</div>
+                    <div>
+                        <p class="font-bold text-sm text-primary">Chef Amos</p>
+                        <p class="text-xs text-muted">Famille Béthanie</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+                <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-chart-pie w-5"></i><span class="font-medium">Vue d'ensemble</span>
+                </a>
+                <a href="membres.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                    <i class="fas fa-users w-5"></i><span class="font-medium">Ma Famille</span>
+                </a>
+                <a href="demandes.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-file-signature w-5"></i>
+                    <span class="font-medium">Demandes</span>
+                    <span class="ml-auto bg-danger text-white text-[10px] font-bold px-2 py-0.5 rounded-full">3</span>
+                </a>
+                <a href="reunions.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-file-alt w-5"></i><span class="font-medium">PV Réunions</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden">
+            
+            <!-- Top Navbar -->
+            <header class="h-20 bg-surface/80 backdrop-blur-md border-b border-border flex items-center justify-between px-8 shrink-0">
+                <div>
+                    <h2 class="text-xl font-bold text-primary font-serif"><i class="fas fa-users text-accent"></i> Ma Famille (Disciples)</h2>
+                    <p class="text-xs text-muted">Gérez le suivi pastoral de vos 24 membres.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-muted"></i>
+                        <input type="text" placeholder="Rechercher un disciple..." class="bg-bg border-none rounded-xl py-2 px-10 text-sm focus:ring-1 focus:ring-chef outline-none w-64">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Body -->
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                
+                <div class="bg-surface rounded-3xl border border-border shadow-sm overflow-hidden animate-fade-in-up">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-surface/50">
+                            <tr class="text-muted text-[10px] font-bold uppercase tracking-widest">
+                                <th class="py-4 px-8">Disciple</th>
+                                <th class="py-4 px-8">Niveau Actuel</th>
+                                <th class="py-4 px-8">Formations</th>
+                                <th class="py-4 px-8">Assiduité (Mois)</th>
+                                <th class="py-4 px-8 text-right">Suivi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            
+                            <!-- Row 1 -->
+                            <tr class="hover:bg-surface transition-colors group cursor-pointer" onclick="openMemberDrawer('Jean Kodjo')">
+                                <td class="py-4 px-8">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center font-bold text-xs shadow-sm">JK</div>
+                                        <div>
+                                            <p class="font-bold text-primary">Jean Kodjo</p>
+                                            <p class="text-xs text-muted">07 00 00 00 00</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-8">
+                                    <span class="badge-star px-3 py-1 text-xs font-bold rounded-full inline-flex items-center gap-1">
+                                        <i class="fas fa-star"></i> Star
+                                    </span>
+                                </td>
+                                <td class="py-4 px-8">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex-1 h-2 bg-surface rounded-full overflow-hidden w-24">
+                                            <div class="h-full bg-success" style="width: 100%"></div>
+                                        </div>
+                                        <span class="text-xs font-bold text-muted">100%</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-8">
+                                    <div class="flex gap-1 text-[10px]">
+                                        <span class="w-2 h-6 bg-success rounded-sm opacity-100" title="Présent"></span>
+                                        <span class="w-2 h-6 bg-success rounded-sm opacity-100" title="Présent"></span>
+                                        <span class="w-2 h-6 bg-success rounded-sm opacity-100" title="Présent"></span>
+                                        <span class="w-2 h-6 bg-success rounded-sm opacity-100" title="Présent"></span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-8 text-right">
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted group-hover:bg-chef group-hover:text-white transition-all">
+                                        <i class="fas fa-chevron-right text-xs"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- Row 2 -->
+                            <tr class="hover:bg-surface transition-colors group cursor-pointer" onclick="openMemberDrawer('Sarah P.')">
+                                <td class="py-4 px-8">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-gray-200 text-muted flex items-center justify-center font-bold text-xs shadow-sm">SP</div>
+                                        <div>
+                                            <p class="font-bold text-primary">Sarah P.</p>
+                                            <p class="text-xs text-danger font-medium"><i class="fas fa-exclamation-triangle"></i> Attention requise</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-8">
+                                    <span class="badge-new px-3 py-1 text-xs font-bold rounded-full inline-flex items-center gap-1">
+                                        <i class="fas fa-seedling"></i> Nouveau
+                                    </span>
+                                </td>
+                                <td class="py-4 px-8">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex-1 h-2 bg-surface rounded-full overflow-hidden w-24">
+                                            <div class="h-full bg-accent" style="width: 30%"></div>
+                                        </div>
+                                        <span class="text-xs font-bold text-muted">30%</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-8">
+                                    <div class="flex gap-1 text-[10px]">
+                                        <span class="w-2 h-6 bg-success rounded-sm opacity-100" title="Présent"></span>
+                                        <span class="w-2 h-6 bg-danger rounded-sm opacity-100" title="Absent"></span>
+                                        <span class="w-2 h-6 bg-danger rounded-sm opacity-100" title="Absent"></span>
+                                        <span class="w-2 h-6 bg-surface rounded-sm opacity-100" title="À venir"></span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-8 text-right">
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted group-hover:bg-chef group-hover:text-white transition-all">
+                                        <i class="fas fa-chevron-right text-xs"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                             <!-- Row 3 -->
+                             <tr class="hover:bg-surface transition-colors group cursor-pointer" onclick="openMemberDrawer('Marc K.')">
+                                <td class="py-4 px-8">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-xs shadow-sm">MK</div>
+                                        <div>
+                                            <p class="font-bold text-primary">Marc K.</p>
+                                            <p class="text-xs text-muted">05 00 00 00 00</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-8">
+                                    <span class="badge-pilot px-3 py-1 text-xs font-bold rounded-full inline-flex items-center gap-1">
+                                        <i class="fas fa-plane"></i> Pilote
+                                    </span>
+                                </td>
+                                <td class="py-4 px-8">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex-1 h-2 bg-surface rounded-full overflow-hidden w-24">
+                                            <div class="h-full bg-success" style="width: 100%"></div>
+                                        </div>
+                                        <span class="text-xs font-bold text-muted">100%</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-8">
+                                    <div class="flex gap-1 text-[10px]">
+                                        <span class="w-2 h-6 bg-success rounded-sm opacity-100" title="Présent"></span>
+                                        <span class="w-2 h-6 bg-success rounded-sm opacity-100" title="Présent"></span>
+                                        <span class="w-2 h-6 bg-success rounded-sm opacity-100" title="Présent"></span>
+                                        <span class="w-2 h-6 bg-success rounded-sm opacity-100" title="Présent"></span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-8 text-right">
+                                    <button class="w-8 h-8 rounded-lg bg-surface text-muted group-hover:bg-chef group-hover:text-white transition-all">
+                                        <i class="fas fa-chevron-right text-xs"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Drawer: Member Detail (Pastoral Care) -->
+    <div id="member-drawer" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-dark/60 backdrop-blur-sm animate-fade-in" onclick="document.getElementById('member-drawer').classList.add('hidden')"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-xl bg-surface shadow-2xl animate-slide-in-right flex flex-col">
+            
+            <header class="p-8 bg-surface border-b border-border flex items-start justify-between shrink-0">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 rounded-2xl bg-gray-200 text-muted flex items-center justify-center font-bold text-xl shadow-sm" id="drawer-avatar">SP</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-primary font-serif" id="drawer-name">Sarah P.</h3>
+                        <p class="text-xs text-muted mt-1">Membre depuis le 12 Fév 2026</p>
+                        <span class="px-2 py-0.5 bg-gray-200 text-muted text-[10px] font-bold rounded-sm inline-flex items-center mt-2 uppercase tracking-widest">
+                            Nouveau Membre
+                        </span>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('member-drawer').classList.add('hidden')" class="w-8 h-8 rounded-full hover:bg-gray-200 text-muted transition-colors flex items-center justify-center"><i class="fas fa-times"></i></button>
+            </header>
+            
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-8">
+                
+                <!-- Quick Contacts -->
+                <div class="flex gap-2">
+                    <a href="tel:#" class="flex-1 py-3 bg-bg text-primary font-bold text-xs rounded-xl hover:bg-primary hover:text-primary-text transition-all flex items-center justify-center gap-2"><i class="fas fa-phone"></i> Appeler</a>
+                    <a href="mailto:#" class="flex-1 py-3 bg-bg text-primary font-bold text-xs rounded-xl hover:bg-primary hover:text-primary-text transition-all flex items-center justify-center gap-2"><i class="fas fa-envelope"></i> E-mail</a>
+                    <a href="#" class="drawer-btn-wa flex-1 py-3 bg-green-50 text-success font-bold text-xs rounded-xl hover:bg-success hover:text-white transition-all flex items-center justify-center gap-2"><i class="fab fa-whatsapp text-lg"></i> WhatsApp</a>
+                </div>
+
+                <!-- Progression Stats -->
+                <div>
+                    <h4 class="text-[10px] font-bold text-muted uppercase tracking-widest mb-4 border-b border-border pb-2">Progression Globale</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 border border-border rounded-2xl">
+                            <p class="text-xs text-muted mb-1">Formations</p>
+                            <p class="text-xl font-bold text-primary">3 / 10 <span class="text-xs font-normal text-muted">Vidéos</span></p>
+                        </div>
+                        <div class="p-4 border border-border rounded-2xl">
+                            <p class="text-xs text-muted mb-1">Assiduité (30j)</p>
+                            <p class="text-xl font-bold text-danger">50% <span class="text-xs font-normal text-muted">Présence</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pastoral Notes -->
+                <div>
+                    <div class="flex items-center justify-between mb-4 border-b border-border pb-2">
+                        <h4 class="text-[10px] font-bold text-muted uppercase tracking-widest">Notes de Suivi Pastoral</h4>
+                        <button class="text-xs text-chef font-bold hover:underline"><i class="fas fa-plus"></i> Ajouter</button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <!-- New Note Input (Hidden by default, shown for demo) -->
+                        <div class="bg-bg p-4 rounded-2xl">
+                            <textarea class="w-full bg-transparent border-none text-sm text-primary resize-none outline-none placeholder-gray-400" placeholder="Rédigez une note de suivi..." rows="3"></textarea>
+                            <div class="flex justify-end mt-2">
+                                <button class="px-4 py-1.5 bg-chef text-white font-bold text-xs rounded-lg shadow-sm">Enregistrer</button>
+                            </div>
+                        </div>
+
+                        <!-- Previous Notes -->
+                        <div class="relative pl-4 border-l-2 border-border">
+                            <div class="absolute -left-[5px] top-1.5 w-2 h-2 bg-gray-300 rounded-full"></div>
+                            <p class="text-[10px] text-muted font-bold mb-1">08 Mai 2026</p>
+                            <p class="text-sm text-muted">Sarah a des difficultés d'horaire avec son nouveau travail, ce qui explique ses absences récentes. Nous avons prié ensemble à ce sujet.</p>
+                        </div>
+                        <div class="relative pl-4 border-l-2 border-border">
+                            <div class="absolute -left-[5px] top-1.5 w-2 h-2 bg-gray-300 rounded-full"></div>
+                            <p class="text-[10px] text-muted font-bold mb-1">12 Fév 2026</p>
+                            <p class="text-sm text-muted">Premier contact établi. Sarah est très motivée pour commencer les formations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openMemberDrawer(name) {
+            document.getElementById('drawer-name').innerText = name;
+            // Update initials
+            const initials = name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+            document.getElementById('drawer-avatar').innerText = initials;
+            
+            document.getElementById('member-drawer').classList.remove('hidden');
+        }
+    </script>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()" class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+</html>

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Formations | EJP - Église des Jeunes Prodiges</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+
+        .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'draw-check': 'drawCheck 0.5s ease-in-out forwards',
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        drawCheck: {
+                            'to': { strokeDashoffset: '0' }
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0', transform: 'scale(0.95)' },
+                            'to': { opacity: '1', transform: 'scale(1)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .sidebar-link:hover {
+            background-color: rgba(245, 166, 35, 0.1);
+            color: #F5A623;
+        }
+
+        .sidebar-link.active {
+            background-color: #F5A623;
+            color: #1E3A5F;
+        }
+
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #1E3A5F;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .filter-pill.active {
+            background-color: #1E3A5F;
+            color: white;
+            border-color: #1E3A5F;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .accordion-item.open .accordion-content {
+            max-height: 1000px;
+            /* Large enough to fit content */
+        }
+
+        .accordion-item.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        .check-svg {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+        }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-surface font-sans text-text overflow-hidden">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Sidebar (Reused) -->
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-[260px] bg-dark text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+            <div class="flex flex-col h-full">
+                <div class="p-6 flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center border border-accent">
+                        <span class="text-accent font-serif font-bold">EJP</span>
+                    </div>
+
+                </div>
+                <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto custom-scrollbar">
+                    <a href="dashboard.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-home w-5"></i>
+                        <span class="font-medium">Tableau de bord</span>
+                    </a>
+                    <a href="formations.html"
+                        class="sidebar-link active relative flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                        <i class="fas fa-graduation-cap w-5"></i>
+                        <span class="font-medium">Mes formations</span>
+                    </a>
+                    <a href="progression.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-chart-line w-5"></i>
+                        <span class="font-medium">Ma progression</span>
+                    </a>
+                    <a href="evenements.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-calendar-alt w-5"></i>
+                        <span class="font-medium">Événements</span>
+                    </a>
+                    <a href="notifications.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-bell w-5"></i>
+                        <span class="font-medium">Notifications</span>
+                    </a>
+                    <a href="compte.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-cog w-5"></i>
+                        <span class="font-medium">Mon compte</span>
+                    </a>
+                </nav>
+                <div class="p-4 border-t border-border space-y-1">
+                    <a href="index.html"
+                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                        <i class="fas fa-globe w-5"></i>
+                        <span class="font-medium">Retour à l'accueil</span>
+                    </a>
+                    <a href="login.html"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-danger hover:bg-danger/10">
+                        <i class="fas fa-door-open w-5"></i>
+                        <span class="font-medium">Déconnexion</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col lg:ml-[260px] h-screen overflow-hidden">
+
+            <!-- Top Header (Reused) -->
+            <header
+                class="sticky top-0 z-30 bg-surface border-b border-border px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" class="lg:hidden text-primary text-2xl">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 class="text-xl font-bold text-primary"><i class="fas fa-graduation-cap text-accent mr-2"></i>Mes
+                        Formations</h2>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-bold text-primary">Jean Kodjo</p>
+                            <p class="text-[10px] font-semibold text-accent uppercase">Star <i
+                                    class="fas fa-star text-accent ml-0.5 animate-pulse-soft"></i></p>
+                        </div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-primary font-bold">
+                            JK</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Body -->
+            <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
+
+                <!-- Page Header Stats -->
+                <div class="bg-surface rounded-2xl p-6 shadow-sm border border-border mb-8">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-sm font-bold text-primary">7 sur 10 formations complétées</span>
+                                <span class="text-sm font-bold text-accent">70%</span>
+                            </div>
+                            <div class="w-full h-4 bg-surface rounded-full overflow-hidden">
+                                <div id="global-progress"
+                                    class="h-full bg-accent rounded-full transition-all duration-1000 ease-out w-0"
+                                    style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <span
+                                class="px-3 py-1 bg-success/10 text-success text-[10px] font-bold rounded-full border border-success/20 uppercase tracking-wider">Obligatoires
+                                <i class="fas fa-check-circle text-success"></i></span>
+                            <span
+                                class="px-3 py-1 bg-primary/5 text-primary/60 text-[10px] font-bold rounded-full border border-primary/10 uppercase tracking-wider">Optionnelles
+                                <i class="fas fa-book text-accent"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap gap-2 mb-8">
+                    <button
+                        class="filter-pill active px-4 py-2 rounded-full border border-border text-sm font-medium transition-all hover:border-primary">Tous</button>
+                    <button
+                        class="filter-pill px-4 py-2 rounded-full border border-border text-sm font-medium transition-all hover:border-primary">Obligatoires</button>
+                    <button
+                        class="filter-pill px-4 py-2 rounded-full border border-border text-sm font-medium transition-all hover:border-primary">Optionnels</button>
+                    <button
+                        class="filter-pill px-4 py-2 rounded-full border border-border text-sm font-medium transition-all hover:border-primary">Complétés</button>
+                    <button
+                        class="filter-pill px-4 py-2 rounded-full border border-border text-sm font-medium transition-all hover:border-primary">Non
+                        commencés</button>
+                </div>
+
+                <!-- Modules (Accordions) -->
+                <div class="space-y-4">
+
+                    <!-- Module 1 -->
+                    <div
+                        class="accordion-item bg-surface rounded-2xl shadow-sm border border-border overflow-hidden open">
+                        <button
+                            class="accordion-trigger w-full px-6 py-5 flex items-center justify-between bg-surface/50 hover:bg-surface transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-primary text-accent rounded-xl flex items-center justify-center shadow-inner">
+                                    <i class="fas fa-cross text-xl"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h3 class="font-bold text-primary">MODULE 1 — Les Fondements de la Foi</h3>
+                                    <span
+                                        class="px-2 py-0.5 bg-danger/10 text-danger text-[10px] font-bold rounded uppercase">Obligatoire</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="text-xs font-bold text-success hidden sm:block">2/3 Vidéos</span>
+                                <i class="fas fa-chevron-down text-muted transition-transform chevron"></i>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <!-- Video Card 1 -->
+                                <div
+                                    class="group bg-surface rounded-xl border border-border p-4 transition-all hover:-translate-y-1 hover:shadow-md">
+                                    <div class="relative aspect-video bg-dark rounded-lg mb-4 overflow-hidden">
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <i
+                                                class="fas fa-play text-white/50 text-4xl group-hover:scale-110 transition-transform"></i>
+                                        </div>
+                                        <div
+                                            class="absolute top-3 right-3 px-2 py-1 bg-success text-white text-[10px] font-bold rounded flex items-center gap-1">
+                                            <i class="fas fa-check"></i> VU
+                                        </div>
+                                    </div>
+                                    <h4 class="font-bold text-primary mb-1">Introduction à la vision de l'EJP</h4>
+                                    <p class="text-xs text-muted mb-4">Durée: 12:45 • Vue le 20/03/2026</p>
+                                    <button
+                                        class="open-modal w-full py-2 bg-surface border border-border text-primary text-sm font-bold rounded-lg hover:bg-surface transition-colors">Revoir</button>
+                                </div>
+
+                                <!-- Video Card 2 -->
+                                <div
+                                    class="group bg-surface rounded-xl border border-border p-4 transition-all hover:-translate-y-1 hover:shadow-md">
+                                    <div class="relative aspect-video bg-dark rounded-lg mb-4 overflow-hidden">
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <i
+                                                class="fas fa-play text-white/50 text-4xl group-hover:scale-110 transition-transform"></i>
+                                        </div>
+                                        <div
+                                            class="absolute top-3 right-3 px-2 py-1 bg-success text-white text-[10px] font-bold rounded flex items-center gap-1">
+                                            <i class="fas fa-check"></i> VU
+                                        </div>
+                                    </div>
+                                    <h4 class="font-bold text-primary mb-1">Les valeurs de l'église</h4>
+                                    <p class="text-xs text-muted mb-4">Durée: 18:20 • Vue le 21/03/2026</p>
+                                    <button
+                                        class="open-modal w-full py-2 bg-surface border border-border text-primary text-sm font-bold rounded-lg hover:bg-surface transition-colors">Revoir</button>
+                                </div>
+
+                                <!-- Video Card 3 -->
+                                <div
+                                    class="group bg-surface rounded-xl border-2 border-accent/30 p-4 transition-all hover:-translate-y-1 hover:shadow-md">
+                                    <div class="relative aspect-video bg-dark rounded-lg mb-4 overflow-hidden">
+                                        <div class="absolute inset-0 flex items-center justify-center bg-accent/10">
+                                            <i
+                                                class="fas fa-play text-accent text-4xl group-hover:scale-110 transition-transform"></i>
+                                        </div>
+                                        <div
+                                            class="absolute top-3 right-3 px-2 py-1 bg-accent text-white text-[10px] font-bold rounded flex items-center gap-1">
+                                            <i class="fas fa-sync fa-spin text-[8px]"></i> EN COURS
+                                        </div>
+                                    </div>
+                                    <h4 class="font-bold text-primary mb-1">Le parcours du disciple</h4>
+                                    <p class="text-xs text-muted mb-4">Durée: 15:10 • 75% complété</p>
+                                    <button
+                                        class="open-modal w-full py-2 bg-accent text-primary text-sm font-bold rounded-lg hover:bg-accent/90 transition-all shadow-sm shadow-accent/20">Reprendre</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 2 -->
+                    <div class="accordion-item bg-surface rounded-2xl shadow-sm border border-border overflow-hidden">
+                        <button
+                            class="accordion-trigger w-full px-6 py-5 flex items-center justify-between bg-surface/50 hover:bg-surface transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-primary/80 text-accent rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-users text-xl"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h3 class="font-bold text-primary">MODULE 2 — Vie Communautaire</h3>
+                                    <span
+                                        class="px-2 py-0.5 bg-danger/10 text-danger text-[10px] font-bold rounded uppercase">Obligatoire</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="text-xs font-bold text-muted hidden sm:block">0/2 Vidéos</span>
+                                <i class="fas fa-chevron-down text-muted transition-transform chevron"></i>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <!-- Video Card -->
+                                <div
+                                    class="group bg-surface rounded-xl border border-border p-4 transition-all hover:-translate-y-1 hover:shadow-md">
+                                    <div class="relative aspect-video bg-gray-200 rounded-lg mb-4 overflow-hidden">
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <i class="fas fa-lock text-muted text-3xl"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="font-bold text-primary mb-1">Comprendre le service</h4>
+                                    <p class="text-xs text-muted mb-4">Durée: 22:00</p>
+                                    <button
+                                        class="open-modal w-full py-2 bg-primary text-primary-text text-sm font-bold rounded-lg hover:bg-primary/90 transition-all">Regarder</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Module 3 -->
+                    <div class="accordion-item bg-surface rounded-2xl shadow-sm border border-border overflow-hidden">
+                        <button
+                            class="accordion-trigger w-full px-6 py-5 flex items-center justify-between bg-surface/50 hover:bg-surface transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-primary/60 text-accent rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-seedling text-xl"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h3 class="font-bold text-primary">MODULE 3 — Développement Personnel</h3>
+                                    <span
+                                        class="px-2 py-0.5 bg-primary/5 text-primary/60 text-[10px] font-bold rounded uppercase">Optionnel</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="text-xs font-bold text-muted hidden sm:block">0/4 Vidéos</span>
+                                <i class="fas fa-chevron-down text-muted transition-transform chevron"></i>
+                            </div>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-12 text-center text-muted italic">
+                                <i class="fas fa-info-circle mb-2 block text-2xl"></i>
+                                Plus de modules seront ajoutés prochainement.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-dark/95 backdrop-blur-sm animate-fade-in"></div>
+        <div
+            class="relative w-full max-w-4xl bg-black rounded-3xl overflow-hidden shadow-2xl transform transition-all animate-fade-in">
+            <!-- Close Button -->
+            <button id="close-modal"
+                class="absolute top-4 right-4 z-10 w-10 h-10 bg-surface/10 hover:bg-surface/20 text-white rounded-full flex items-center justify-center transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+
+            <!-- Video Container -->
+            <div class="aspect-video bg-black flex items-center justify-center">
+                <iframe id="video-iframe" class="w-full h-full" src="" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+
+            <!-- Video Info -->
+            <div class="p-6 bg-dark text-white border-t border-border flex items-center justify-between">
+                <div>
+                    <h3 id="modal-video-title" class="text-xl font-bold font-serif">Titre de la vidéo</h3>
+                    <p class="text-sm text-white/60">Module : Les Fondements de la Foi</p>
+                </div>
+                <div id="completion-status" class="flex flex-col items-center">
+                    <!-- SVG Checkmark (animated) -->
+                    <div id="check-container" class="hidden">
+                        <svg class="w-12 h-12 text-success" fill="none" stroke="currentColor" stroke-width="4"
+                            viewBox="0 0 24 24">
+                            <circle class="opacity-20" cx="12" cy="12" r="10" stroke="currentColor"></circle>
+                            <path class="check-svg" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                    </div>
+                    <button id="mark-seen"
+                        class="px-6 py-2 bg-accent text-primary font-bold rounded-full hover:scale-105 transition-transform">Terminer
+                        la vidéo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Sidebar
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+        mobileMenuBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Accordion Logic
+        const accordionItems = document.querySelectorAll('.accordion-item');
+        accordionItems.forEach(item => {
+            const trigger = item.querySelector('.accordion-trigger');
+            trigger.addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+                // Close others
+                // accordionItems.forEach(i => i.classList.remove('open'));
+                if (!isOpen) item.classList.add('open');
+                else item.classList.remove('open');
+            });
+        });
+
+        // Filter Pills
+        const filterPills = document.querySelectorAll('.filter-pill');
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                filterPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+            });
+        });
+
+        // Modal Logic
+        const modal = document.getElementById('video-modal');
+        const closeModal = document.getElementById('close-modal');
+        const openModalBtns = document.querySelectorAll('.open-modal');
+        const videoIframe = document.getElementById('video-iframe');
+        const modalTitle = document.getElementById('modal-video-title');
+        const markSeenBtn = document.getElementById('mark-seen');
+        const checkContainer = document.getElementById('check-container');
+
+        // IDs YouTube simulés
+        const videoIds = ['ScMzIvxBSi4', 'X_PshS0m2v4', 'Z-5wE89kGzU'];
+
+        openModalBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const card = btn.closest('.group');
+                const title = card.querySelector('h4').textContent;
+                modalTitle.textContent = title;
+                videoIframe.src = `https://www.youtube.com/embed/${videoIds[index % 3]}?autoplay=1`;
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+
+                // Reset completion state
+                markSeenBtn.classList.remove('hidden');
+                checkContainer.classList.add('hidden');
+            });
+        });
+
+        function handleCloseModal() {
+            modal.classList.add('hidden');
+            videoIframe.src = '';
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        closeModal.addEventListener('click', handleCloseModal);
+        modal.querySelector('.absolute.inset-0').addEventListener('click', handleCloseModal);
+
+        markSeenBtn.addEventListener('click', () => {
+            markSeenBtn.classList.add('hidden');
+            checkContainer.classList.remove('hidden');
+
+            // Trigger Confetti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#F5A623', '#1E3A5F', '#27AE60']
+            });
+
+            setTimeout(() => {
+                handleCloseModal();
+                // Optionally update UI card to "VU"
+            }, 2000);
+        });
+
+        // Entrance Animation for global progress
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('global-progress').style.width = '70%';
+            }, 500);
+        });
+    </script>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()"
+        class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+
+</html>

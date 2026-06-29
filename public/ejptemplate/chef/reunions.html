@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PV Réunions | EJP Chef</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+                .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { transform: 'translateY(15px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(100%)' },
+                            '100%': { transform: 'translateX(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .sidebar-link.active { background-color: rgba(17, 94, 89, 0.1); color: #115E59; border-right: 4px solid #115E59; }
+        .sidebar-link:not(.active):hover { background-color: rgba(0, 0, 0, 0.02); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .pv-card { transition: all 0.3s ease; border: 1px solid #115E59; }
+        .pv-card:hover { transform: translateY(-5px); border-color: #27AE60; box-shadow: 0 12px 30px -10px rgba(17,94,89,0.25); }
+
+        /* Avatar bubbles dark mode safe */
+        .avatar-blue { background-color: rgba(59,130,246,0.18); color: #3B82F6; }
+        .avatar-pink { background-color: rgba(236,72,153,0.18); color: #EC4899; }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+        
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-bg font-sans text-text overflow-hidden">
+    
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar Chef -->
+        <aside class="w-[280px] bg-surface border-r border-border flex flex-col h-full z-50 shrink-0">
+            <div class="p-8 flex items-center gap-4">
+                <div class="w-12 h-12 bg-chef rounded-xl flex items-center justify-center border border-white shadow-md">
+                    <span class="text-white font-serif font-bold text-xl">EJP</span>
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-lg leading-tight text-primary">Portail Chef</h1>
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-chef">Responsable Famille</p>
+                </div>
+            </div>
+            
+            <div class="px-8 pb-4">
+                <div class="flex items-center gap-3 bg-surface p-3 rounded-xl border border-border">
+                    <div class="w-10 h-10 rounded-full bg-primary text-primary-text flex items-center justify-center font-bold text-sm">AM</div>
+                    <div>
+                        <p class="font-bold text-sm text-primary">Chef Amos</p>
+                        <p class="text-xs text-muted">Famille Béthanie</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+                <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-chart-pie w-5"></i><span class="font-medium">Vue d'ensemble</span>
+                </a>
+                <a href="membres.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-users w-5"></i><span class="font-medium">Ma Famille</span>
+                </a>
+                <a href="demandes.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-file-signature w-5"></i>
+                    <span class="font-medium">Demandes</span>
+                    <span class="ml-auto bg-danger text-white text-[10px] font-bold px-2 py-0.5 rounded-full">3</span>
+                </a>
+                <a href="reunions.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                    <i class="fas fa-file-alt w-5"></i><span class="font-medium">PV Réunions</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden">
+            
+            <!-- Top Navbar -->
+            <header class="h-20 bg-surface/80 backdrop-blur-md border-b border-border flex items-center justify-between px-8 shrink-0">
+                <h2 class="text-xl font-bold text-primary font-serif"><i class="fas fa-file-alt text-accent"></i> PV Réunions Famille</h2>
+                <div class="flex items-center gap-4">
+                    <button id="add-pv-btn" class="bg-chef text-white font-bold px-6 py-2.5 rounded-xl hover:bg-[#0D4D49] transition-colors flex items-center gap-2 shadow-md shadow-chef/20">
+                        <i class="fas fa-plus"></i> Nouveau PV
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Body -->
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- PV Card 1 -->
+                    <div class="pv-card bg-surface p-8 rounded-3xl animate-fade-in-up" style="animation-delay: 0.1s">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="px-3 py-1 bg-chef/10 text-chef text-[10px] font-bold rounded-full uppercase tracking-widest">SOUMIS</span>
+                            <span class="text-muted text-xs font-medium"><i class="fas fa-calendar-alt"></i> 10 Mai 2026</span>
+                        </div>
+                        <h3 class="text-xl font-serif font-bold text-primary mb-2">Réunion de Famille (Mai)</h3>
+                        <p class="text-xs text-muted mb-6 line-clamp-2">Partage sur la vision de l'année, prière pour les examens des étudiants et accueil des nouveaux membres.</p>
+                        
+                        <div class="flex items-center justify-between mb-8 pb-6 border-b border-border">
+                            <div>
+                                <p class="text-[10px] text-muted font-bold uppercase tracking-widest mb-1">Présences</p>
+                                <p class="text-sm font-bold text-primary">20/24 <span class="text-xs font-normal text-success">(83%)</span></p>
+                            </div>
+                            <div class="flex -space-x-3">
+                                <div class="w-8 h-8 rounded-full border-2 border-surface avatar-blue flex items-center justify-center font-bold text-[10px]">JK</div>
+                                <div class="w-8 h-8 rounded-full border-2 border-surface avatar-pink flex items-center justify-center font-bold text-[10px]">ML</div>
+                                <div class="w-8 h-8 rounded-full border-2 border-surface bg-surface text-muted flex items-center justify-center font-bold text-[10px]">+18</div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button class="flex-1 py-2.5 bg-bg text-primary font-bold text-xs rounded-xl hover:bg-primary hover:text-primary-text transition-all">Consulter</button>
+                            <button class="w-11 h-11 flex items-center justify-center border border-border rounded-xl text-muted hover:text-chef transition-colors">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PV Card 2 -->
+                    <div class="pv-card bg-surface p-8 rounded-3xl animate-fade-in-up" style="animation-delay: 0.2s">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="px-3 py-1 bg-surface text-muted text-[10px] font-bold rounded-full uppercase tracking-widest">BROUILLON</span>
+                            <span class="text-muted text-xs font-medium"><i class="fas fa-calendar-alt"></i> 14 Mai 2026</span>
+                        </div>
+                        <h3 class="text-xl font-serif font-bold text-primary mb-2">Rencontre de Suivi</h3>
+                        <p class="text-xs text-muted mb-6 italic">PV en cours de rédaction...</p>
+                        
+                        <div class="flex items-center justify-between mb-8 pb-6 border-b border-border">
+                            <div>
+                                <p class="text-[10px] text-muted font-bold uppercase tracking-widest mb-1">Présences</p>
+                                <p class="text-sm font-bold text-muted">-</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button class="flex-1 py-2.5 bg-chef text-white font-bold text-xs rounded-xl hover:bg-[#0D4D49] transition-all">Continuer la saisie</button>
+                            <button class="w-11 h-11 flex items-center justify-center border border-border rounded-xl text-muted hover:text-danger transition-colors">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Drawer: New PV -->
+    <div id="add-drawer" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-dark/60 backdrop-blur-sm animate-fade-in" onclick="document.getElementById('add-drawer').classList.add('hidden')"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-2xl bg-surface shadow-2xl animate-slide-in-right flex flex-col">
+            <header class="p-10 border-b border-border flex items-center justify-between shrink-0">
+                <h3 class="text-2xl font-bold text-primary font-serif">Nouveau PV de Réunion</h3>
+                <button onclick="document.getElementById('add-drawer').classList.add('hidden')" class="w-10 h-10 rounded-full hover:bg-surface text-muted transition-colors"><i class="fas fa-times text-xl"></i></button>
+            </header>
+            
+            <div class="flex-1 overflow-y-auto p-10 custom-scrollbar space-y-8">
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Titre de la réunion</label>
+                        <input type="text" class="w-full bg-bg border-none rounded-xl py-3 px-4 text-sm focus:ring-1 focus:ring-chef" placeholder="Ex: Réunion Mensuelle Famille">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Date</label>
+                        <input type="date" class="w-full bg-bg border-none rounded-xl py-3 px-4 text-sm text-muted focus:ring-1 focus:ring-chef">
+                    </div>
+                </div>
+
+                <!-- Pointage des présences -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Pointage des présences</label>
+                        <span class="text-xs font-bold text-chef">2 / 24 Présents</span>
+                    </div>
+                    <div class="p-4 bg-surface border border-border rounded-2xl max-h-48 overflow-y-auto custom-scrollbar">
+                        <!-- Checklist Items -->
+                        <div class="flex items-center justify-between py-2 border-b border-border last:border-0">
+                            <span class="text-sm font-bold text-primary">Jean Kodjo</span>
+                            <input type="checkbox" class="w-5 h-5 rounded text-chef focus:ring-chef" checked>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-border last:border-0">
+                            <span class="text-sm font-bold text-primary">Marie L.</span>
+                            <input type="checkbox" class="w-5 h-5 rounded text-chef focus:ring-chef" checked>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-border last:border-0">
+                            <span class="text-sm font-medium text-muted">Sarah P.</span>
+                            <input type="checkbox" class="w-5 h-5 rounded text-chef focus:ring-chef">
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-border last:border-0">
+                            <span class="text-sm font-medium text-muted">David K.</span>
+                            <input type="checkbox" class="w-5 h-5 rounded text-chef focus:ring-chef">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Points Abordés</label>
+                    <textarea class="w-full bg-bg border-none rounded-2xl py-4 px-6 text-sm text-primary min-h-[150px] focus:ring-1 focus:ring-chef" placeholder="Sujets discutés, enseignements partagés..."></textarea>
+                </div>
+
+                <div class="space-y-4">
+                    <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Sujets de Prière / Suivi</label>
+                    <textarea class="w-full bg-bg border-none rounded-2xl py-4 px-6 text-sm text-primary min-h-[100px] focus:ring-1 focus:ring-chef" placeholder="Sujets nécessitant un suivi particulier..."></textarea>
+                </div>
+
+            </div>
+
+            <footer class="p-10 border-t border-border shrink-0 flex gap-4">
+                <button type="button" onclick="document.getElementById('add-drawer').classList.add('hidden')" class="w-1/3 py-4 bg-surface border border-border text-muted font-bold rounded-2xl hover:bg-surface transition-colors">Brouillon</button>
+                <button type="button" class="flex-1 py-4 bg-chef text-white font-bold rounded-2xl hover:bg-[#0D4D49] transition-colors shadow-lg shadow-chef/20 flex items-center justify-center gap-2">
+                    <i class="fas fa-check"></i> Soumettre le PV
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('add-pv-btn').onclick = () => {
+            document.getElementById('add-drawer').classList.remove('hidden');
+        };
+    </script>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()" class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+</html>

@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "title": "Church of Young Prodigies",
+    "home": "Home",
+    "about": "About",
+    "parcours": "Journey",
+    "events": "Events",
+    "formations": "Training",
+    "login": "Login"
+  },
+  "hero": {
+    "welcome": "WELCOME TO THE CHURCH OF YOUNG PRODIGIES",
+    "title1": "A Dedicated",
+    "title2": "Generation",
+    "cta": "Access my space",
+    "slide1": "A community united by faith",
+    "slide2": "Grow in your spiritual journey",
+    "slide3": "Youth serving God",
+    "slide4": "Train. Progress. Serve.",
+    "slide5": "Impact your generation and the world"
+  },
+  "about": {
+    "identity": "Our Identity",
+    "subtitle": "Who are we?",
+    "title": "A church driven by the vision of ANAGKAZO",
+    "description": "With a clear vision coming from the Great Commission of Matthew 28:19 — <em>“Go and make disciples of all nations”</em> — the Church of Young Prodigies is vision-bound to actively seek lost souls, especially the youth, to welcome, equip, and raise them as true disciples.",
+    "p1": "The Church of Young Prodigies is more than just a gathering place. It's a vibrant community where every young person is called to discover their divine potential and use it for God's glory.",
+    "p2": "Our mission is to build a dedicated generation, rooted in the Word, and equipped to positively impact their environment across the world.",
+    "verse": "« Let no one despise your youth, but be an example to the believers in word, in conduct, in love, in spirit, in faith, in purity. »",
+    "verse_ref": "— 1 Timothy 4:12",
+    "verse_container": "“Let no one despise your youth, but be an example to the believers...” <span class=\"font-bold not-italic ml-2\">— 1 Timothy 4:12</span>",
+    "item1_title": "Community",
+    "item1_desc": "Authentic and lasting fraternal bonds",
+    "item2_title": "Training",
+    "item2_desc": "A structured path toward spiritual maturity",
+    "item3_title": "Mission",
+    "item3_desc": "Equipped to serve beyond the walls of the church",
+    "stat1_lbl": "Active members",
+    "stat2_lbl": "Progression levels",
+    "stat3_lbl": "Years of existence",
+    "stat3_unit": "years",
+    "stat4_lbl": "Digital"
+  },
+  "parcours": {
+    "subtitle": "Your Journey",
+    "title": "From New Member to Missionary",
+    "desc": "A growth path designed for every disciple",
+    "level1_title": "New Member",
+    "level1_desc": "Welcome and integration into the family.",
+    "level2_title": "Star",
+    "level2_desc": "Foundations validated, active member.",
+    "level3_title": "Pilot",
+    "level3_desc": "Committed to the service of the church.",
+    "level4_title": "Pillar",
+    "level4_desc": "Solid leader and role model for the community.",
+    "level5_title": "Missionary",
+    "level5_desc": "Sent out to plant or lead beyond."
+  },
+  "events": {
+    "subtitle": "Calendar",
+    "title": "Our Upcoming Events",
+    "desc": "Join us at our upcoming gatherings",
+    "ev1_date": "Nov 15",
+    "ev1_title": "Thanksgiving Service",
+    "ev1_time": "09:00 - 12:00",
+    "ev1_loc": "Main Sanctuary",
+    "ev2_date": "Nov 20",
+    "ev2_title": "Prayer Vigil",
+    "ev2_time": "22:00 - 04:00",
+    "ev2_loc": "Chapel",
+    "ev3_date": "Nov 25",
+    "ev3_title": "Leaders Seminar",
+    "ev3_time": "14:00 - 18:00",
+    "ev3_loc": "Conference Room"
+  },
+  "formations": {
+    "subtitle": "Training Space",
+    "title": "Develop Your Skills",
+    "desc": "Log in to resume where you left off and discover new exclusive modules.",
+    "cta": "Resume my training"
+  },
+  "suggestions": {
+    "subtitle": "Your Voice",
+    "title": "Suggestion Box",
+    "desc": "An idea to improve the platform or the EJP? Your opinion means a lot to us. Do not hesitate to let us know (anonymously if you wish).",
+    "cta": "Make a suggestion"
+  },
+  "footer": {
+    "verse": "« But you are a chosen generation, a royal priesthood, a holy nation, His own special people, that you may proclaim the praises of Him who called you out of darkness into His marvelous light. »",
+    "verse_ref": "— 1 Peter 2:9",
+    "rights": "© 2026 Church of Young Prodigies.<br>All rights reserved.",
+    "contact": "Don't have an account or facing an issue? Contact us at:",
+    "made_by": "Made by EJP · Version 1.0 · 2026"
+  },
+  "login": {
+    "verse": "\"Let no one despise your youth.\"",
+    "verse_ref": "1 Timothy 4:12",
+    "welcome": "Welcome",
+    "subtitle": "Access your member area",
+    "id_label": "Username or email",
+    "id_placeholder": "Your username",
+    "id_error": "This field is required",
+    "pw_label": "Password",
+    "pw_forgot": "Forgot password?",
+    "pw_error": "Password is required",
+    "remember": "Remember me",
+    "submit": "Login",
+    "no_account": "Not a member yet?",
+    "join": "Join us"
+  }
+}

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres | EJP Admin</title>
+    <!-- Fonts (FuturaStd) -->
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-surface: #F9FAFB;
+            --color-primary: #000000;
+            --color-primary-text: #FFFFFF;
+            --color-text: #111827;
+            --color-text-muted: #6B7280;
+            --color-border: #E5E7EB;
+        }
+                .dark {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-primary: #FFFFFF;
+            --color-primary-text: #000000;
+            --color-text: #F9FAFB;
+            --color-text-muted: #9CA3AF;
+            --color-border: #1F2937;
+        }
+
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBook.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdHeavy.otf') format('opentype');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: 'var(--color-primary)', 'primary-text': 'var(--color-primary-text)', accent: '#F5A623', success: '#27AE60', danger: '#E74C3C', bg: 'var(--color-bg)', surface: 'var(--color-surface)', text: 'var(--color-text)', muted: 'var(--color-text-muted)', border: 'var(--color-border)', chef: '#115E59' },
+                    fontFamily: {
+                        sans: ['FuturaStd', 'sans-serif'],
+                        serif: ['FuturaStd', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .sidebar-link.active { background-color: rgba(245, 166, 35, 0.1); color: #F5A623; border-right: 4px solid #F5A623; }
+        .sidebar-link:not(.active):hover { background-color: rgba(255, 255, 255, 0.05); }
+        
+        .settings-tab.active { background-color: #1E3A5F; color: white; }
+        .settings-tab:not(.active):hover { background-color: #f8fafc; }
+        
+        /* Toggle Switch styling */
+        .toggle-checkbox:checked { right: 0; border-color: #27AE60; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #27AE60; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out forwards; }
+    </style>
+
+    <script>
+        // Theme Toggle Script
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        initTheme();
+        
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-bg font-sans text-text overflow-hidden">
+    
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar Admin (Unified) -->
+        <aside class="w-[280px] bg-surface border-r border-border flex flex-col h-full z-50 shrink-0">
+            <div class="p-8 flex items-center gap-4">
+                <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center border border-accent">
+                    <span class="text-accent font-serif font-bold text-xl">EJP</span>
+                </div>
+                <div><h1 class="font-serif font-bold text-lg leading-tight">Admin Panel</h1></div>
+            </div>
+            <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+                <a href="dashboard.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-chart-pie w-5"></i><span class="font-medium">Tableau de bord</span>
+                </a>
+                <a href="membres.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-users w-5"></i><span class="font-medium">Membres</span>
+                </a>
+                <a href="chefs.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-user-tie w-5"></i><span class="font-medium">Chefs & Groupes</span>
+                </a>
+                <a href="formations.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-graduation-cap w-5"></i><span class="font-medium">Formations</span>
+                </a>
+                <a href="cultes.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-church w-5"></i><span class="font-medium">Cultes</span>
+                </a>
+                <a href="reunions.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-file-alt w-5"></i><span class="font-medium">PV Réunions</span>
+                </a>
+                <a href="evenements.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-calendar-check w-5"></i><span class="font-medium">Événements</span>
+                </a>
+                <a href="communications.html" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-muted">
+                    <i class="fas fa-paper-plane w-5"></i><span class="font-medium">Communications</span>
+                </a>
+                <a href="parametres.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-lg transition-all">
+                    <i class="fas fa-sliders-h w-5"></i><span class="font-medium">Paramètres</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden">
+            
+            <!-- Top Navbar -->
+            <header class="h-20 bg-surface border-b border-border flex items-center justify-between px-8 shrink-0">
+                <h2 class="text-xl font-bold text-primary"><i class="fas fa-cog text-accent"></i> Paramètres Système</h2>
+                <button class="bg-primary text-primary-text font-bold px-6 py-2.5 rounded-xl hover:bg-dark transition-colors flex items-center gap-2 shadow-lg shadow-primary/20">
+                    <i class="fas fa-save"></i> Enregistrer les modifications
+                </button>
+            </header>
+
+            <!-- Scrollable Body with Two Columns Layout -->
+            <div class="flex-1 overflow-hidden flex">
+                
+                <!-- Settings Sidebar -->
+                <div class="w-64 bg-surface border-r border-border p-6 flex flex-col gap-2 shrink-0 h-full overflow-y-auto">
+                    <button class="settings-tab active w-full text-left px-4 py-3 rounded-xl font-medium text-sm transition-colors" data-target="general">
+                        <i class="fas fa-cog w-6 text-center"></i> Général
+                    </button>
+                    <button class="settings-tab w-full text-left px-4 py-3 rounded-xl font-medium text-sm text-muted transition-colors" data-target="security">
+                        <i class="fas fa-shield-alt w-6 text-center"></i> Sécurité
+                    </button>
+                    <button class="settings-tab w-full text-left px-4 py-3 rounded-xl font-medium text-sm text-muted transition-colors" data-target="notifications">
+                        <i class="fas fa-bell w-6 text-center"></i> Notifications
+                    </button>
+                    <button class="settings-tab w-full text-left px-4 py-3 rounded-xl font-medium text-sm text-muted transition-colors" data-target="roles">
+                        <i class="fas fa-user-shield w-6 text-center"></i> Rôles & Accès
+                    </button>
+                </div>
+
+                <!-- Settings Content Area -->
+                <div class="flex-1 p-8 overflow-y-auto custom-scrollbar">
+                    
+                    <!-- Tab: Général -->
+                    <div id="tab-general" class="tab-content active max-w-3xl space-y-8">
+                        <div>
+                            <h3 class="text-lg font-bold text-primary font-serif mb-1">Configuration de base</h3>
+                            <p class="text-xs text-muted mb-6">Informations principales de la plateforme EJP.</p>
+                            
+                            <div class="space-y-6 bg-surface p-6 rounded-3xl border border-border shadow-sm">
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div class="space-y-1">
+                                        <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Nom de l'application</label>
+                                        <input type="text" class="w-full bg-bg border-none rounded-xl py-3 px-4 text-sm focus:ring-1 focus:ring-accent" value="EJP Portail Membres">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Email de contact (Support)</label>
+                                        <input type="email" class="w-full bg-bg border-none rounded-xl py-3 px-4 text-sm focus:ring-1 focus:ring-accent" value="contact@ejp.ci">
+                                    </div>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-bold text-muted uppercase tracking-widest">Numéro WhatsApp (Assistance)</label>
+                                    <input type="tel" class="w-full bg-bg border-none rounded-xl py-3 px-4 text-sm focus:ring-1 focus:ring-accent" value="+225 00 00 00 00 00">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-primary font-serif mb-1">État du Système</h3>
+                            <p class="text-xs text-muted mb-6">Contrôlez l'accès global à l'application.</p>
+                            
+                            <div class="bg-surface rounded-3xl border border-border shadow-sm divide-y divide-gray-50">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <p class="font-bold text-primary text-sm">Ouverture des inscriptions</p>
+                                        <p class="text-xs text-muted">Autoriser de nouveaux membres à créer un compte.</p>
+                                    </div>
+                                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="toggle" id="toggle1" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-surface border-4 appearance-none cursor-pointer transition-transform duration-200 ease-in-out" checked/>
+                                        <label for="toggle1" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-200 ease-in-out"></label>
+                                    </div>
+                                </div>
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <p class="font-bold text-primary text-sm">Mode Maintenance</p>
+                                        <p class="text-xs text-muted">Rendre l'application inaccessible aux membres (les admins conservent l'accès).</p>
+                                    </div>
+                                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="toggle" id="toggle2" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-surface border-4 appearance-none cursor-pointer transition-transform duration-200 ease-in-out"/>
+                                        <label for="toggle2" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-200 ease-in-out"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Sécurité -->
+                    <div id="tab-security" class="tab-content max-w-3xl space-y-8">
+                        <div>
+                            <h3 class="text-lg font-bold text-primary font-serif mb-1">Politique de Mot de Passe</h3>
+                            <p class="text-xs text-muted mb-6">Exigences de sécurité pour les comptes membres et admins.</p>
+                            
+                            <div class="bg-surface rounded-3xl border border-border shadow-sm divide-y divide-gray-50">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <p class="font-bold text-primary text-sm">Caractères spéciaux obligatoires</p>
+                                        <p class="text-xs text-muted">Exiger au moins un symbole (!@#$%).</p>
+                                    </div>
+                                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="toggle" id="toggle3" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-surface border-4 appearance-none cursor-pointer transition-transform duration-200 ease-in-out" checked/>
+                                        <label for="toggle3" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-200 ease-in-out"></label>
+                                    </div>
+                                </div>
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <p class="font-bold text-primary text-sm">Double Authentification (2FA) pour les Chefs</p>
+                                        <p class="text-xs text-muted">Obligatoire pour accéder aux données des groupes.</p>
+                                    </div>
+                                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="toggle" id="toggle4" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-surface border-4 appearance-none cursor-pointer transition-transform duration-200 ease-in-out"/>
+                                        <label for="toggle4" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-200 ease-in-out"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 bg-danger/10 border border-danger/20 rounded-3xl">
+                            <h4 class="text-danger font-bold mb-2"><i class="fas fa-exclamation-triangle"></i> Déconnexion Globale</h4>
+                            <p class="text-xs text-danger mb-4 opacity-80">Déconnecter tous les utilisateurs actifs actuellement (y compris vous-même). Utile en cas de faille critique.</p>
+                            <button class="bg-danger text-white font-bold text-xs px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">Forcer la déconnexion</button>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder tabs -->
+                    <div id="tab-notifications" class="tab-content max-w-3xl">
+                        <div class="p-10 text-center text-muted">
+                            <i class="fas fa-tools text-4xl mb-4 opacity-50"></i>
+                            <p class="font-medium">Paramètres des notifications en cours de développement.</p>
+                        </div>
+                    </div>
+                    <div id="tab-roles" class="tab-content max-w-3xl">
+                        <div class="p-10 text-center text-muted">
+                            <i class="fas fa-tools text-4xl mb-4 opacity-50"></i>
+                            <p class="font-medium">Gestion fine des permissions en cours de développement.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Tab switching logic
+        const tabs = document.querySelectorAll('.settings-tab');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active classes
+                tabs.forEach(t => { t.classList.remove('active', 'bg-primary', 'text-primary-text'); t.classList.add('text-muted'); });
+                contents.forEach(c => c.classList.remove('active'));
+
+                // Add active to clicked
+                tab.classList.add('active', 'bg-primary', 'text-primary-text');
+                tab.classList.remove('text-muted');
+                
+                const targetId = `tab-${tab.getAttribute('data-target')}`;
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+        
+        // CSS specific to custom toggle switch (handled in head style, logic in CSS using checkbox :checked)
+        // Adjusting styles for absolute position in custom toggle switch
+        document.querySelectorAll('.toggle-checkbox').forEach(cb => {
+            cb.style.right = 'auto'; // Resetting default to let CSS handle it
+            if(cb.checked) { cb.style.transform = 'translateX(100%)'; }
+            
+            cb.addEventListener('change', function() {
+                if(this.checked) {
+                    this.style.transform = 'translateX(100%)';
+                    this.style.borderColor = '#27AE60';
+                } else {
+                    this.style.transform = 'translateX(0)';
+                    this.style.borderColor = 'white';
+                }
+            });
+            // Initial state
+            cb.dispatchEvent(new Event('change'));
+        });
+    </script>
+
+    <!-- Theme Toggle Floating Button -->
+    <button onclick="toggleTheme()" class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-primary text-primary-text shadow-2xl flex items-center justify-center text-xl hover:scale-110 transition-transform border border-border">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+</body>
+</html>
