@@ -48,6 +48,13 @@
                 <a href="{{ route('admin.demandes.index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                     <i class="fas fa-arrow-up"></i> Progressions
                 </a>
+                @php $unreadNotifs = auth()->user()->notifications()->where('lue', false)->count(); @endphp
+                <a href="{{ route('admin.notifications.index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 relative">
+                    <i class="fas fa-bell"></i> Notifications
+                    @if ($unreadNotifs > 0)
+                        <span class="ml-auto bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">{{ $unreadNotifs }}</span>
+                    @endif
+                </a>
                 <a href="{{ route('admin.parametres.index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                     <i class="fas fa-gear"></i> Paramètres
                 </a>

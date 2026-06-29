@@ -17,9 +17,9 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 // Route publique
-Route::get('/', function () {
-    return view('welcome');
-})->name('accueil');
+Route::get('/', [\App\Http\Controllers\LandingController::class, 'index'])->name('accueil');
+
+Route::post('/suggestions', [\App\Http\Controllers\Frontend\SuggestionController::class, 'store'])->name('suggestions.store');
 
 // Authentification
 Route::get('/login', [LoginController::class, 'showMembreLoginForm'])->name('login');
@@ -33,6 +33,26 @@ Route::post('/admin/login', [LoginController::class, 'authenticate']);
 // Chef login
 Route::get('/chef/login', [LoginController::class, 'showChefLoginForm'])->name('chef.login');
 Route::post('/chef/login', [LoginController::class, 'authenticate']);
+
+// Routes protégées Chef
+Route::middleware(['auth', 'role:chef'])->prefix('chef')->name('chef.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Chef\DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/membres', [\App\Http\Controllers\Chef\MembreController::class, 'index'])->name('membres.index');
+    Route::get('/membres/{membre}', [\App\Http\Controllers\Chef\MembreController::class, 'show'])->name('membres.show');
+
+    Route::get('/reunions', [\App\Http\Controllers\Chef\ReunionController::class, 'index'])->name('reunions.index');
+    Route::post('/reunions', [\App\Http\Controllers\Chef\ReunionController::class, 'store'])->name('reunions.store');
+    Route::get('/reunions/{reunion}', [\App\Http\Controllers\Chef\ReunionController::class, 'show'])->name('reunions.show');
+    Route::put('/reunions/{reunion}', [\App\Http\Controllers\Chef\ReunionController::class, 'update'])->name('reunions.update');
+    Route::delete('/reunions/{reunion}', [\App\Http\Controllers\Chef\ReunionController::class, 'destroy'])->name('reunions.destroy');
+    Route::put('/reunions/{reunion}/soumettre', [\App\Http\Controllers\Chef\ReunionController::class, 'soumettre'])->name('reunions.soumettre');
+
+    Route::get('/demandes-progression', [\App\Http\Controllers\Chef\DemandeProgressionController::class, 'index'])->name('demandes.index');
+    Route::post('/demandes-progression', [\App\Http\Controllers\Chef\DemandeProgressionController::class, 'store'])->name('demandes.store');
+    Route::put('/demandes-progression/{demande}/approuver', [\App\Http\Controllers\Chef\DemandeProgressionController::class, 'approuver'])->name('demandes.approuver');
+    Route::put('/demandes-progression/{demande}/refuser', [\App\Http\Controllers\Chef\DemandeProgressionController::class, 'refuser'])->name('demandes.refuser');
+});
 
 // Routes protégées Admin
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -94,4 +114,29 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications', [NotificationController::class, 'send'])->name('notifications.send');
+});
+
+// Routes protégées Membre
+Route::middleware(['auth', 'role:membre'])->name('membre.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Frontend\DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/formations', [\App\Http\Controllers\Frontend\FormationController::class, 'index'])->name('formations.index');
+    Route::get('/formations/{module}', [\App\Http\Controllers\Frontend\FormationController::class, 'show'])->name('formations.show');
+    Route::post('/formations/{module}/marquer-vu', [\App\Http\Controllers\Frontend\FormationController::class, 'markAsSeen'])->name('formations.markSeen');
+
+    Route::get('/evenements', [\App\Http\Controllers\Frontend\EvenementController::class, 'index'])->name('evenements.index');
+    Route::get('/evenements/{evenement}', [\App\Http\Controllers\Frontend\EvenementController::class, 'show'])->name('evenements.show');
+
+    Route::get('/progression', [\App\Http\Controllers\Frontend\ProgressionController::class, 'index'])->name('progression.index');
+    Route::post('/progression/demander', [\App\Http\Controllers\Frontend\ProgressionController::class, 'demanderProgression'])->name('progression.demander');
+
+    Route::get('/notifications', [\App\Http\Controllers\Frontend\NotificationController::class, 'index'])->name('notifications.index');
+    Route::put('/notifications/{notification}/lire', [\App\Http\Controllers\Frontend\NotificationController::class, 'markAsRead'])->name('notifications.markRead');
+    Route::put('/notifications/lire-toutes', [\App\Http\Controllers\Frontend\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
+    Route::delete('/notifications/{notification}', [\App\Http\Controllers\Frontend\NotificationController::class, 'destroy'])->name('notifications.destroy');
+
+    Route::get('/compte', [\App\Http\Controllers\Frontend\CompteController::class, 'edit'])->name('compte.edit');
+    Route::put('/compte', [\App\Http\Controllers\Frontend\CompteController::class, 'update'])->name('compte.update');
+    Route::put('/compte/mot-de-passe', [\App\Http\Controllers\Frontend\CompteController::class, 'updatePassword'])->name('compte.updatePassword');
+    Route::put('/compte/photo', [\App\Http\Controllers\Frontend\CompteController::class, 'updatePhoto'])->name('compte.updatePhoto');
 });

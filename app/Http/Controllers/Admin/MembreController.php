@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Chef;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class MembreController extends Controller
@@ -33,7 +34,19 @@ class MembreController extends Controller
         $data['statut'] = 'nouveau_membre';
         $data['date_entree'] = now();
 
-        User::create($data);
+        $membre = User::create($data);
+
+        NotificationService::log(auth()->id(), 'membre_ajoute', 'a ajouté un nouveau membre', $membre->full_name);
+
+        if ($membre->chef_responsable_id) {
+            NotificationService::notify(
+                $membre->chefResponsable->user_id,
+                'systeme',
+                'Nouveau membre assigné',
+                "{$membre->full_name} vous a été assigné comme membre.",
+                '/chef/membres'
+            );
+        }
 
         return redirect()->route('admin.membres.index')->with('success', 'Membre créé avec succès.');
     }

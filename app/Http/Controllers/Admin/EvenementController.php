@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Evenement;
+use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class EvenementController extends Controller
@@ -27,7 +29,20 @@ class EvenementController extends Controller
         ]);
 
         $data['user_id'] = auth()->id();
-        Evenement::create($data);
+        $evenement = Evenement::create($data);
+
+        NotificationService::log(auth()->id(), 'evenement_cree', 'a créé un événement', $evenement->titre);
+
+        $membres = User::where('role', 'membre')->get();
+        foreach ($membres as $membre) {
+            NotificationService::notify(
+                $membre->id,
+                'evenements',
+                "Nouvel événement : {$evenement->titre}",
+                "Un nouvel événement a été créé : {$evenement->titre} le {$evenement->date_debut->format('d/m/Y')} à {$evenement->lieu}.",
+                '/evenements'
+            );
+        }
 
         return redirect()->route('admin.evenements.index')->with('success', 'Événement créé.');
     }
