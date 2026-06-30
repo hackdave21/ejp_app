@@ -245,11 +245,11 @@
 
     <main>
         <section id="hero" class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-            <div id="slide-1" class="hero-slide active" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(30,58,95,0.8) 100%), url('assets/hero1.jpg') center/cover;"></div>
-            <div id="slide-2" class="hero-slide" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(10,40,24,0.8) 100%), url('assets/hero2.jpg') center/cover;"></div>
-            <div id="slide-3" class="hero-slide" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(45,27,0,0.8) 100%), url('assets/hero3.jpg') center/cover;"></div>
-            <div id="slide-4" class="hero-slide" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(45,27,0,0.8) 100%), url('assets/hero4.jpg') center/cover;"></div>
-            <div id="slide-5" class="hero-slide" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(15,27,45,0.8) 100%), url('assets/hero5.jpg') center/cover;"></div>
+            <div id="slide-1" class="hero-slide active" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(30,58,95,0.8) 100%), url('{{ asset('assets/hero1.jpg') }}') center/cover;"></div>
+            <div id="slide-2" class="hero-slide" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(10,40,24,0.8) 100%), url('{{ asset('assets/hero2.jpg') }}') center/cover;"></div>
+            <div id="slide-3" class="hero-slide" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(45,27,0,0.8) 100%), url('{{ asset('assets/hero3.jpg') }}') center/cover;"></div>
+            <div id="slide-4" class="hero-slide" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(45,27,0,0.8) 100%), url('{{ asset('assets/hero4.jpg') }}') center/cover;"></div>
+            <div id="slide-5" class="hero-slide" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(15,27,45,0.8) 100%), url('{{ asset('assets/hero5.jpg') }}') center/cover;"></div>
 
             <div class="hero-overlay" id="parallax-overlay"></div>
 
