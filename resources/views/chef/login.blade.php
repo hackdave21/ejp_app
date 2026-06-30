@@ -24,39 +24,40 @@
             --color-border: #1F2937;
         }
 
-        @font-face {
-            font-family: 'FuturaStd';
-            src: url('{{ asset("ejptemplate/chef/fonts/FuturaStdBook.otf") }}') format('opentype');
-            font-weight: 400;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'FuturaStd';
-            src: url('{{ asset("ejptemplate/chef/fonts/FuturaStdMedium.otf") }}') format('opentype');
-            font-weight: 500;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'FuturaStd';
-            src: url('{{ asset("ejptemplate/chef/fonts/FuturaStdHeavy.otf") }}') format('opentype');
-            font-weight: 600;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'FuturaStd';
-            src: url('{{ asset("ejptemplate/chef/fonts/FuturaStdBold.otf") }}') format('opentype');
-            font-weight: 700;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'FuturaStd';
-            src: url('{{ asset("ejptemplate/chef/fonts/FuturaStdExtraBold.otf") }}') format('opentype');
-            font-weight: 800;
-            font-style: normal;
-        }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdLight.otf") }}') format('opentype'); font-weight: 300; font-style: normal; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdLightOblique.otf") }}') format('opentype'); font-weight: 300; font-style: italic; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdBook.otf") }}') format('opentype'); font-weight: 400; font-style: normal; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdBookOblique.otf") }}') format('opentype'); font-weight: 400; font-style: italic; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdMedium.otf") }}') format('opentype'); font-weight: 500; font-style: normal; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdMediumOblique.otf") }}') format('opentype'); font-weight: 500; font-style: italic; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdHeavy.otf") }}') format('opentype'); font-weight: 600; font-style: normal; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdHeavyOblique.otf") }}') format('opentype'); font-weight: 600; font-style: italic; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdBold.otf") }}') format('opentype'); font-weight: 700; font-style: normal; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdBoldOblique.otf") }}') format('opentype'); font-weight: 700; font-style: italic; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdExtraBold.otf") }}') format('opentype'); font-weight: 800; font-style: normal; }
+        @font-face { font-family: 'FuturaStd'; src: url('{{ asset("fonts/FuturaStdExtraBoldOblique.otf") }}') format('opentype'); font-weight: 800; font-style: italic; }
+        @font-face { font-family: 'FuturaStdCondensed'; src: url('{{ asset("fonts/FuturaStdCondensedLight.otf") }}') format('opentype'); font-weight: 300; font-style: normal; }
+        @font-face { font-family: 'FuturaStdCondensed'; src: url('{{ asset("fonts/FuturaStdCondensedLightObl.otf") }}') format('opentype'); font-weight: 300; font-style: italic; }
+        @font-face { font-family: 'FuturaStdCondensed'; src: url('{{ asset("fonts/FuturaStdCondensed.otf") }}') format('opentype'); font-weight: 400; font-style: normal; }
+        @font-face { font-family: 'FuturaStdCondensed'; src: url('{{ asset("fonts/FuturaStdCondensedOblique.otf") }}') format('opentype'); font-weight: 400; font-style: italic; }
+        @font-face { font-family: 'FuturaStdCondensed'; src: url('{{ asset("fonts/FuturaStdCondensedBold.otf") }}') format('opentype'); font-weight: 700; font-style: normal; }
+        @font-face { font-family: 'FuturaStdCondensed'; src: url('{{ asset("fonts/FuturaStdCondensedBoldObl.otf") }}') format('opentype'); font-weight: 700; font-style: italic; }
+        @font-face { font-family: 'FuturaStdCondensed'; src: url('{{ asset("fonts/FuturaStdCondensedExtraBd.otf") }}') format('opentype'); font-weight: 800; font-style: normal; }
+        @font-face { font-family: 'FuturaStdCondensed'; src: url('{{ asset("fonts/FuturaStdCondExtraBoldObl.otf") }}') format('opentype'); font-weight: 800; font-style: italic; }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .font-light { font-weight: 300; }
+        .font-book { font-weight: 400; }
+        .font-heavy { font-weight: 600; }
+        em, i { font-style: italic; }
+        h1, h2, h3, h4, h5, h6 { font-weight: 700; letter-spacing: -0.02em; }
+        .stat-value { font-weight: 800; letter-spacing: -0.03em; }
+        .label { font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.65rem; }
+        .text-condensed { font-family: 'FuturaStdCondensed', sans-serif; letter-spacing: -0.01em; }
+    </style>
 
     <script>
         tailwind.config = {
@@ -67,6 +68,7 @@
                     fontFamily: {
                         sans: ['FuturaStd', 'sans-serif'],
                         serif: ['FuturaStd', 'sans-serif'],
+                        condensed: ['FuturaStdCondensed', 'sans-serif'],
                     },
                     animation: {
                         'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',

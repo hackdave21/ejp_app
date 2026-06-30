@@ -52,6 +52,8 @@ Route::middleware(['auth', 'role:chef'])->prefix('chef')->name('chef.')->group(f
     Route::post('/demandes-progression', [\App\Http\Controllers\Chef\DemandeProgressionController::class, 'store'])->name('demandes.store');
     Route::put('/demandes-progression/{demande}/approuver', [\App\Http\Controllers\Chef\DemandeProgressionController::class, 'approuver'])->name('demandes.approuver');
     Route::put('/demandes-progression/{demande}/refuser', [\App\Http\Controllers\Chef\DemandeProgressionController::class, 'refuser'])->name('demandes.refuser');
+
+    Route::get('/notifications', [\App\Http\Controllers\Chef\NotificationController::class, 'index'])->name('notifications.index');
 });
 
 // Routes protégées Admin

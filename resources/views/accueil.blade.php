@@ -11,13 +11,31 @@
         @font-face {
             font-family: 'FuturaStd';
             src: url('fonts/FuturaStdBook.otf') format('opentype');
-            font-weight: normal;
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdMedium.otf') format('opentype');
+            font-weight: 500;
             font-style: normal;
         }
         @font-face {
             font-family: 'FuturaStd';
             src: url('fonts/FuturaStdHeavy.otf') format('opentype');
-            font-weight: bold;
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'FuturaStd';
+            src: url('fonts/FuturaStdExtraBold.otf') format('opentype');
+            font-weight: 800;
             font-style: normal;
         }
     </style>
@@ -623,7 +641,7 @@
         </div>
 
         <div class="text-center font-body text-muted/30 text-[10px] uppercase tracking-widest pb-6">
-            Made by EJP · Version 1.0 · {{ date('Y') }}
+            Made by EJP · {{ date('Y') }}
         </div>
     </footer>
 
