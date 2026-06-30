@@ -12,11 +12,17 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $totalMembres = User::where('role', 'membre')->count();
+
         $stats = [
-            'total_membres' => User::where('role', 'membre')->count(),
+            'total_membres' => $totalMembres,
             'total_chefs' => User::where('role', 'chef')->count(),
             'total_evenements' => Evenement::count(),
             'total_formations' => FormationModule::count(),
+            'total_stars' => User::where('role', 'membre')->where('statut', 'star')->count(),
+            'total_pilotes' => User::where('role', 'membre')->where('statut', 'pilote')->count(),
+            'total_piliers' => User::where('role', 'membre')->where('statut', 'pilier')->count(),
+            'total_missionnaires' => User::where('role', 'membre')->where('statut', 'missionnaire')->count(),
             'demandes_en_attente' => DemandeProgression::where('statut', 'en_attente')->count(),
             'nouveaux_membres' => User::where('role', 'membre')->where('statut', 'nouveau_membre')->count(),
         ];
